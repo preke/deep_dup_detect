@@ -1,3 +1,8 @@
+import pandas as pd
+import numpy as np
+from word_hashing import WordHashing
+import pickle
+
 def clsm_gen_question_set():
     quora_path = '../../data/quora_duplicate_questions.tsv'
     df = pd.read_csv(quora_path, sep='\t')
