@@ -59,6 +59,8 @@ args.sementic_size = 128
     Quora & clsm
 
 '''
+clsm_gen_question_set()
+
 if not os.path.exists(embedding_dict_path):
     print('Re-create datasets...')
     clsm_gen_question_set()

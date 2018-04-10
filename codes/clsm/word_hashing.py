@@ -34,12 +34,13 @@ class WordHashing(object):
         # min count
         min_count_keys = []
         for k, v in self.trigram_dict.items():
-            if v < 100:
+            if v < 5:
                 min_count_keys.append(k)
         for k in min_count_keys:
             del self.trigram_dict[k]
 
         self.dict_len = len(self.trigram_dict)
+        print('self.dict_len:%s' %self.dict_len)
         # convert all dict-values into indexs
         cnt = 0
         for k,v in self.trigram_dict.items():
