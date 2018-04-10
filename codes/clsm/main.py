@@ -69,12 +69,12 @@ else:
 TEXT = data.Field(sequential=True, use_vocab=True, batch_first=True)
 label_field  = data.Field(sequential=False)
 train_data = data.TabularDataset(path=Train_path, 
-                                 format='CSV',
+                                 format='TSV',
                                  fields=[('query', TEXT), ('pos_doc', TEXT), ('neg_doc_1', TEXT), 
                                         ('neg_doc_2', TEXT), ('neg_doc_3', TEXT), ('neg_doc_4', TEXT),
                                         ('neg_doc_5', TEXT) ])
 vali_data = data.TabularDataset(path=Vali_path, 
-                                 format='CSV',
+                                 format='TSV',
                                  fields=[('query', TEXT), ('pos_doc', TEXT), ('neg_doc_1', TEXT), 
                                         ('neg_doc_2', TEXT), ('neg_doc_3', TEXT), ('neg_doc_4', TEXT),
                                         ('neg_doc_5', TEXT) ])

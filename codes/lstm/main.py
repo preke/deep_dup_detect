@@ -46,7 +46,7 @@ parser.add_argument('-snapshot', type=str, default=None, help='filename of model
 
 args = parser.parse_args()
 args.save_dir = os.path.join(args.save_dir, datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))   
-
+args.pretrained_weight = 
 '''
     begin
 '''
@@ -54,8 +54,9 @@ args.save_dir = os.path.join(args.save_dir, datetime.datetime.now().strftime('%Y
 text_field, label_field, train_data, train_iter,\
     vali_data, vali_iter, test_data, test_iter = load_quora(args)
 
-text_field.build_vocab(train_data, vali_data)
+text_field.build_vocab(train_data, vali_data, min_freq=5)
 label_field.build_vocab(train_data, vali_data)
+
 
 
 
