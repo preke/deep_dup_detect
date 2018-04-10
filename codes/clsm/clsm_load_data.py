@@ -43,8 +43,8 @@ def clsm_gen_question_set():
 
     ques_dict = {}
     for i, r in df.iterrows():
-        ques_dict[r['qid1']] = r['question1']
-        ques_dict[r['qid2']] = r['question2']
+        ques_dict[r['qid1']] = r['question1'].lower()
+        ques_dict[r['qid2']] = r['question2'].lower()
 
     corpus = []
     for i, r in df_train_new.iterrows():
