@@ -93,9 +93,9 @@ def clsm_gen_question_set():
     df_test_text = df_test[['ques1_text', 'ques2_text', 'is_duplicate']]
     df_test_text.to_csv('../../data/clsm_qoura_test_text.tsv', sep='\t', index=False)    
     
-    with open('model/embedding_dict.save', 'w') as f:
+    with open('model/embedding_dict.save', 'wb') as f:
         pickle.dump(embedding_dict, f)
-    with open('model/embedding_length.save', 'w') as f:
+    with open('model/embedding_length.save', 'wb') as f:
         pickle.dump(embedding_length, f)
 
 
