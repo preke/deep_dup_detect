@@ -39,7 +39,7 @@ parser.add_argument('-dropout', type=float, default=0.5, help='the probability f
 parser.add_argument('-max-norm', type=float, default=3.0, help='l2 constraint of parameters [default: 3.0]')
 parser.add_argument('-embed-dim', type=int, default=300, help='number of embedding dimension [default: 300]')
 parser.add_argument('-kernel-num', type=int, default=300, help='number of each kind of kernel')
-parser.add_argument('-kernel-sizes', type=str, default='3', help='comma-separated kernel size to use for convolution')
+parser.add_argument('-kernel-size', type=str, default='3', help='comma-separated kernel size to use for convolution')
 parser.add_argument('-static', action='store_true', default=False, help='fix the embedding')
 # device
 parser.add_argument('-device', type=int, default=0, help='device to use for iterate data, -1 mean cpu [default: -1]')
