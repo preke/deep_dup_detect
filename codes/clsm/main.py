@@ -25,7 +25,7 @@ parser = argparse.ArgumentParser(description='')
 # learning
 parser.add_argument('-lr', type=float, default=0.005, help='initial learning rate [default: 0.001]')
 parser.add_argument('-epochs', type=int, default=50, help='number of epochs for train [default: 256]')
-parser.add_argument('-batch-size', type=int, default=2, help='batch size for training [default: 64]')
+parser.add_argument('-batch-size', type=int, default=64, help='batch size for training [default: 64]')
 parser.add_argument('-log-interval',  type=int, default=1,   help='how many steps to wait before logging training status [default: 1]')
 parser.add_argument('-test-interval', type=int, default=100, help='how many steps to wait before testing [default: 100]')
 parser.add_argument('-save-interval', type=int, default=500, help='how many steps to wait before saving [default:500]')
@@ -90,7 +90,7 @@ train_iter = data.Iterator(
     repeat=False)
 vali_iter = data.Iterator(
     vali_data, 
-    batch_size=len(vali_data),
+    batch_size=args.batch_size,
     device=0,
     repeat=False)
 
