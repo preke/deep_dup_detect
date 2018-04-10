@@ -5,7 +5,6 @@ import json
 import torch
 import torchtext.data as data
 import torchtext.datasets as datasets
-from load_data import gen_iter, load_quora
 import argparse
 from clsm_load_data import clsm_gen_question_set
 from word_hashing import WordHashing
