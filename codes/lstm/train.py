@@ -35,8 +35,21 @@ def train(train_iter, vali_iter, model, args):
             if steps % args.log_interval == 0:
                 sys.stdout.write('\rBatch[{}] - loss: {:.6f}'.format(steps, loss.data[0]))
                 log_file.write('\rBatch[{}] - loss: {:.6f}'.format(steps, loss.data[0]))
-                # corrects = (torch.max(logit, 1)[1].view(target.size()).data == target.data).sum()
+                loss_list = [] 
+                length = len(target.data)
+                for i in range(length):
+                    a = logit.data[i]
+                    b = target.data[i]
+                corrects = 0
+                if a <= 0 and b == 0:
+                    corrects += 1
+                elif a > 0 and b == 1:
+                    corrects += 1
                 accuracy = 100.0 * corrects/batch.batch_size
+                print('\n acc: %s'%str(accuracy))
+            
+
+
             if steps % args.test_interval == 0:
                 vali_loss = eval(vali_iter, model, args).data[0]
                 if vali_loss < min_loss:
