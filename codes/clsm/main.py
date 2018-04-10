@@ -9,6 +9,8 @@ import argparse
 from clsm_load_data import clsm_gen_question_set
 from word_hashing import WordHashing
 import pickle
+import datetime
+import traceback
 from train import train
 
 Train_path = '../../data/clsm_qoura_train_text.tsv'
