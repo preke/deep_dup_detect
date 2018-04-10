@@ -49,6 +49,9 @@ parser.add_argument('-test', action='store_true', default=False, help='train or 
 
 args   = parser.parse_args()
 
+args.save_dir = os.path.join(args.save_dir, datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
+args.sementic_size = 128 
+
 '''
     Quora & clsm
 
@@ -63,26 +66,22 @@ else:
 
 TEXT = data.Field(sequential=True, use_vocab=True, batch_first=True)
 label_field  = data.Field(sequential=False)
-
 train_data = data.TabularDataset(path=Train_path, 
                                  format='CSV',
                                  fields=[('query', TEXT), ('pos_doc', TEXT), ('neg_doc_1', TEXT), 
                                         ('neg_doc_2', TEXT), ('neg_doc_3', TEXT), ('neg_doc_4', TEXT),
                                         ('neg_doc_5', TEXT) ])
-
 vali_data = data.TabularDataset(path=Vali_path, 
                                  format='CSV',
                                  fields=[('query', TEXT), ('pos_doc', TEXT), ('neg_doc_1', TEXT), 
                                         ('neg_doc_2', TEXT), ('neg_doc_3', TEXT), ('neg_doc_4', TEXT),
                                         ('neg_doc_5', TEXT) ])
 TEXT.build_vocab(train_data, vali_data)
-
 train_iter = data.Iterator(
     train_data,
     batch_size=args.batch_size,
     device=0,
     repeat=False)
-
 vali_iter = data.Iterator(
     vali_data, 
     batch_size=len(vali_data),
@@ -92,7 +91,6 @@ vali_iter = data.Iterator(
 print('Building vocabulary done. vocabulary length: %s.\n' %str(len(train_data)))
 args.embedding_length = embedding_length
 args.embedding_num    = len(TEXT.vocab)
-
 word_vec_list = []
 for idx, word in enumerate(TEXT.vocab.itos):
     if word in embedding_dict:
@@ -108,6 +106,31 @@ if args.cuda:
     torch.cuda.set_device(args.device)
     cnn = cnn.cuda()
 
-train(train_iter=train_iter, vali_iter=vali_iter, model=cnn, args=args)
+if args.snapshot is not None:
+    print('\nLoading model from {}...'.format(args.snapshot))
+    cnn.load_state_dict(torch.load(args.snapshot))
+else:
+    train(train_iter=train_iter, vali_iter=vali_iter, model=cnn, args=args)
+
+
+'''
+    test
+'''
+
+
+test_data = data.TabularDataset(path=Test_path, 
+                                 format='CSV',
+                                 fields=[('query', TEXT), ('doc', TEXT), ('label', label_field)])
+label_field.build_vocab(test_data)
+test_iter = data.Iterator(
+    test_data,
+    batch_size=args.batch_size,
+    device=0,
+    repeat=False)
+
+test(test_iter=test_iter, model=cnn, args=args)
+
+
+
 
 

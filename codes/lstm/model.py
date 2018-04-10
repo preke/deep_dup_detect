@@ -94,6 +94,7 @@ class Bi_lstm_similarity(lstm):
                             num_layers=self.num_layers,
                             bidirectional=True)
 
+    
     def forward(self, s1, s2):
         s1 = self.word_embedding(s1)
         s1_out, (s1_h, s1_c) = self.lstm(s1)
