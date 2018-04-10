@@ -10,7 +10,7 @@ import os
 import datetime
 import traceback
 from lstm_load_data import load_quora
-
+from lstm_load_data import load_glove_as_dict
 '''
     考虑如何解决两句话很相似，但是仅仅因为一两个字不同导致不是一个label为重复的pair?
     损失函数 or 相似度函数 由两部分组成：
@@ -46,7 +46,7 @@ parser.add_argument('-snapshot', type=str, default=None, help='filename of model
 
 args = parser.parse_args()
 args.save_dir = os.path.join(args.save_dir, datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))   
-args.pretrained_weight = 
+args.pretrained_weight = load_glove_as_dict('../../data/wordvec.txt')
 '''
     begin
 '''

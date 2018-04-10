@@ -12,6 +12,16 @@ quora_train_path = '../data/train.tsv'
 quora_vali_path = '../data/dev.tsv'
 quora_test_path = '../data/test.tsv'
 
+def load_glove_as_dict(filepath):
+    word_vec = {}
+    with open(filepath) as fr:
+        for line in fr:
+            line = line.split()
+            word = line[0]
+            vec = line[1:]
+            word_vec[word] = vec
+    return word_vec
+
 def gen_iter(path, text_field, label_field, pair_id_field, args):
     '''
         Load TabularDataset from path,
