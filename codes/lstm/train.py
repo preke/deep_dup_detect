@@ -35,7 +35,6 @@ def train(train_iter, vali_iter, model, args):
             if steps % args.log_interval == 0:
                 sys.stdout.write('\rBatch[{}] - loss: {:.6f}'.format(steps, loss.data[0]))
                 log_file.write('\rBatch[{}] - loss: {:.6f}'.format(steps, loss.data[0]))
-                loss_list = [] 
                 length = len(target.data)
                 for i in range(length):
                     a = logit.data[i]
@@ -77,52 +76,36 @@ def eval(vali_iter, model, args):
     model.eval()
     accuracy, avg_loss = 0, 0
     for batch in vali_iter:
-        query, pos_doc, neg_doc_1, neg_doc_2, neg_doc_3, neg_doc_4, neg_doc_5 = \
-            batch.query, batch.pos_doc, batch.neg_doc_1, batch.neg_doc_2, batch.neg_doc_3, batch.neg_doc_4, batch.neg_doc_5
+        question1, question2, label = batch.question1, batch.question2, batch.label
+        label.data.sub_(1)
         if args.cuda:
-            query, pos_doc, neg_doc_1, neg_doc_2, neg_doc_3, neg_doc_4, neg_doc_5 = \
-                query.cuda(), pos_doc.cuda(), neg_doc_1.cuda(), neg_doc_2.cuda(), neg_doc_3.cuda(), neg_doc_4.cuda(), neg_doc_5.cuda()
-
-        results = torch.cat([model(query, pos_doc).view(-1,1), model(query, neg_doc_1).view(-1,1)], 1)
-        results = torch.cat([results, model(query, neg_doc_2).view(-1,1)], 1)
-        results = torch.cat([results, model(query, neg_doc_3).view(-1,1)], 1)
-        results = torch.cat([results, model(query, neg_doc_4).view(-1,1)], 1)
-        results = torch.cat([results, model(query, neg_doc_5).view(-1,1)], 1)
-        criterion  = nn.NLLLoss()
-        target_tmp = Variable(torch.LongTensor(np.array([0], dtype=float)))
-        target     = target_tmp
-        for i in range(results.shape[0] - 1):
-            target = torch.cat([target, target_tmp])
-        if args.cuda:
-            target = target.cuda()
-        log_softmax = nn.LogSoftmax(dim = 1)
-        loss = criterion(log_softmax(results), target)
+            question1, question2, label = question1.cuda(), question2.cuda(), label.cuda()
+        logit = model(question1, question2)
+        loss = F.cross_entropy(logit, target)
         return loss
 
 def test(test_iter, model, args):
     accuracy = 0.0
     total_num = 0.0
     for batch in test_iter:
-        query, doc, label = batch.query, batch.doc, batch.label
+        question1, question2, label = batch.question1, batch.question2, batch.label
+        label.data.sub_(1)
         if args.cuda:
-            query, doc, label = query.cuda(), doc.cuda(), label.cuda()
+            question1, question2, label = question1.cuda(), question2.cuda(), label.cuda()
 
-        results = model(query, doc)
-        for i in range(len(label.data)):
-            # print('label:%s\n' %str(label.data[i]))
-            # print('results:%s\n' %str(results.data[i]))
+        logit = model(question1, question2)
+        length = len(target.data)
+        for i in range(length):
+            a = logit.data[i]
+            b = target.data[i]
+            corrects = 0
+            if a <= 0 and b == 0:
+                corrects += 1
+            elif a > 0 and b == 1:
+                corrects += 1
+        accuracy = 100.0 * corrects/batch.batch_size
+        print('\n test acc: %s'%str(accuracy))
 
-            if (label.data[i] == 1) and (results.data[i] > 0):
-                accuracy += 1.0
-            elif (label.data[i] == 2) and (results.data[i] <= 0):
-                accuracy += 1.0
-            else:
-                pass
-        
-        total_num += len(label.data)
-    print(accuracy)
-    print(total_num)
-    print('Accuracy is: %s' %str(accuracy/total_num))
 
 
 
