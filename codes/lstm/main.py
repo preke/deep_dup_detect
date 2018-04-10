@@ -11,6 +11,9 @@ import datetime
 import traceback
 from lstm_load_data import load_quora
 from lstm_load_data import load_glove_as_dict
+from model import lstm
+from model import lstm_similarity
+
 '''
     考虑如何解决两句话很相似，但是仅仅因为一两个字不同导致不是一个label为重复的pair?
     损失函数 or 相似度函数 由两部分组成：
@@ -47,6 +50,7 @@ parser.add_argument('-snapshot', type=str, default=None, help='filename of model
 args = parser.parse_args()
 args.save_dir = os.path.join(args.save_dir, datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))   
 args.pretrained_weight = load_glove_as_dict('../../data/wordvec.txt')
+args.word_Embedding = True
 '''
     begin
 '''
@@ -57,9 +61,20 @@ text_field, label_field, train_data, train_iter,\
 text_field.build_vocab(train_data, vali_data, min_freq=5)
 label_field.build_vocab(train_data, vali_data)
 
+args.word_embedding_num = len(text_field.vocab)
+args.word_embedding_length = 300
 
+lstm_sim = lstm_similarity(args)
+args.cuda = (not args.no_cuda) and torch.cuda.is_available(); del args.no_cuda
+if args.cuda:
+    torch.cuda.set_device(args.device)
+    lstm_sim = lstm_sim.cuda()
 
-
+if args.snapshot is not None:
+    print('\nLoading model from {}...'.format(args.snapshot))
+    lstm_sim.load_state_dict(torch.load(args.snapshot))
+else:
+    train(train_iter=train_iter, vali_iter=vali_iter, model=lstm_sim, args=args)
 
 
 
