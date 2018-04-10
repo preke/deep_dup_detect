@@ -12,6 +12,7 @@ import pickle
 import datetime
 import traceback
 from train import train
+from model import CNN_clsm
 
 Train_path = '../../data/clsm_qoura_train_text.tsv'
 Vali_path  = '../../data/clsm_qoura_vali_text.tsv'
@@ -59,8 +60,10 @@ args.sementic_size = 128
 
 '''
 if not os.path.exists(embedding_dict_path):
+    print('Re-create datasets...')
     clsm_gen_question_set()
 else:
+    print('Load datasets...')
     with open(embedding_dict_path, 'rb') as f:
         embedding_dict = pickle.load(f)
     with open(embedding_length_path, 'rb') as f:
@@ -79,6 +82,7 @@ vali_data = data.TabularDataset(path=Vali_path,
                                         ('neg_doc_2', TEXT), ('neg_doc_3', TEXT), ('neg_doc_4', TEXT),
                                         ('neg_doc_5', TEXT) ])
 TEXT.build_vocab(train_data, vali_data)
+
 train_iter = data.Iterator(
     train_data,
     batch_size=args.batch_size,
@@ -93,6 +97,8 @@ vali_iter = data.Iterator(
 print('Building vocabulary done. vocabulary length: %s.\n' %str(len(train_data)))
 args.embedding_length = embedding_length
 args.embedding_num    = len(TEXT.vocab)
+print('word vector length: %s.\n' %str(args.embedding_num))
+
 word_vec_list = []
 for idx, word in enumerate(TEXT.vocab.itos):
     if word in embedding_dict:
