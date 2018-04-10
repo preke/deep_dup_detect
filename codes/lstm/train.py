@@ -14,28 +14,20 @@ def train(train_iter, vali_iter, model, args):
     optimizer  = torch.optim.Adam(parameters, lr=args.lr)
     steps      = 0
     last_step  = 0
-    min_loss   = 10000
+    
     model.train()
     log_file = open('log.txt', 'w')
     for epoch in range(1, args.epochs+1):
         print('\nEpoch:%s\n'%epoch)
         log_file.write('\nEpoch:%s\n'%epoch)
         for batch in train_iter:
-            query, pos_doc, neg_doc_1, neg_doc_2, neg_doc_3, neg_doc_4, neg_doc_5 = \
-            batch.query, batch.pos_doc, batch.neg_doc_1, batch.neg_doc_2, batch.neg_doc_3, batch.neg_doc_4, batch.neg_doc_5
-            # query.t_(), pos_doc.t_(), neg_doc_1.t_(), neg_doc_2.t_(), neg_doc_3.t_(), neg_doc_4.t_(), neg_doc_5.t_()
+            question1, question2, label = batch.question1, batch.question2, batch.label
+            label.data.sub_(1)
             if args.cuda:
-                query, pos_doc, neg_doc_1, neg_doc_2, neg_doc_3, neg_doc_4, neg_doc_5 = \
-                query.cuda(), pos_doc.cuda(), neg_doc_1.cuda(), neg_doc_2.cuda(), neg_doc_3.cuda(), neg_doc_4.cuda(), neg_doc_5.cuda()
-            
+                question1, question2, label = question1.cuda(), question2.cuda(), label.cuda()
             optimizer.zero_grad()
-            results = torch.cat([model(query, pos_doc).view(-1,1), model(query, neg_doc_1).view(-1,1)], 1)
-            results = torch.cat([results, model(query, neg_doc_2).view(-1,1)], 1)
-            results = torch.cat([results, model(query, neg_doc_3).view(-1,1)], 1)
-            results = torch.cat([results, model(query, neg_doc_4).view(-1,1)], 1)
-            results = torch.cat([results, model(query, neg_doc_5).view(-1,1)], 1)
-            criterion  = nn.NLLLoss()
-            target_tmp = Variable(torch.LongTensor(np.array([0], dtype=float)))
+            logit = model(question1, question2)
+            
             target     = target_tmp
             for i in range(results.shape[0] - 1):
                 target = torch.cat([target, target_tmp])

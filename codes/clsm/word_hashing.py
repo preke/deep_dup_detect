@@ -34,7 +34,7 @@ class WordHashing(object):
         # min count
         min_count_keys = []
         for k, v in self.trigram_dict.items():
-            if v < 10:
+            if v < 100:
                 min_count_keys.append(k)
         for k in min_count_keys:
             del self.trigram_dict[k]

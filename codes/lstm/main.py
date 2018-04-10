@@ -34,13 +34,14 @@ parser.add_argument('-save-interval', type=int, default=500, help='how many step
 parser.add_argument('-save-dir', type=str, default='snapshot', help='where to save the snapshot')
 parser.add_argument('-early-stop', type=int, default=1000, help='iteration numbers to stop without performance increasing')
 parser.add_argument('-save-best', type=bool, default=True, help='whether to save when get best performance')
+
 # data 
 parser.add_argument('-shuffle', action='store_true', default=False, help='shuffle the data every epoch')
+
 # model
 parser.add_argument('-dropout', type=float, default=0.5, help='the probability for dropout [default: 0.5]')
 parser.add_argument('-max-norm', type=float, default=3.0, help='l2 constraint of parameters [default: 3.0]')
-parser.add_argument('-kernel-num', type=int, default=300, help='number of each kind of kernel')
-parser.add_argument('-kernel-size', type=str, default=3, help='comma-separated kernel size to use for convolution')
+
 # device
 parser.add_argument('-device', type=int, default=0, help='device to use for iterate data, -1 mean cpu [default: -1]')
 parser.add_argument('-no-cuda', action='store_true', default=False, help='disable the gpu')
