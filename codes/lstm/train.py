@@ -27,21 +27,16 @@ def train(train_iter, vali_iter, model, args):
                 question1, question2, label = question1.cuda(), question2.cuda(), label.cuda()
             optimizer.zero_grad()
             logit = model(question1, question2)
-            
-            target     = target_tmp
-            for i in range(results.shape[0] - 1):
-                target = torch.cat([target, target_tmp])
-            if args.cuda:
-                target = target.cuda()
-            log_softmax = nn.LogSoftmax(dim = 1)
-            loss = criterion(log_softmax(results), target)
+            loss = F.cross_entropy(logit, target)
             loss.backward()
-            optimizer.step()
-
             steps += 1
+            
+
             if steps % args.log_interval == 0:
                 sys.stdout.write('\rBatch[{}] - loss: {:.6f}'.format(steps, loss.data[0]))
                 log_file.write('\rBatch[{}] - loss: {:.6f}'.format(steps, loss.data[0]))
+                # corrects = (torch.max(logit, 1)[1].view(target.size()).data == target.data).sum()
+                accuracy = 100.0 * corrects/batch.batch_size
             if steps % args.test_interval == 0:
                 vali_loss = eval(vali_iter, model, args).data[0]
                 if vali_loss < min_loss:
