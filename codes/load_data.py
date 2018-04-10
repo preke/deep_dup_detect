@@ -61,7 +61,8 @@ def load_quora(args):
     
     train_data, train_iter = gen_iter(quora_train_path, text_field, label_field, pair_id_field, args)
     vali_data, vali_iter   = gen_iter(quora_vali_path, text_field, label_field, pair_id_field, args)
-    test_data, test_iter   = gen_iter(quora_test_path, text_field, label_field, pair_id_field, args)
+    test_data, test_iter   = 
+    gen_iter(quora_test_path, text_field, label_field, pair_id_field, args)
     
     text_field.build_vocab(train_data, vali_data)
     label_field.build_vocab(train_data, vali_data)

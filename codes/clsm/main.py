@@ -97,7 +97,7 @@ vali_iter = data.Iterator(
 print('Building vocabulary done. vocabulary length: %s.\n' %str(len(train_data)))
 args.embedding_length = embedding_length
 args.embedding_num    = len(TEXT.vocab)
-print('word vector length: %s.\n' %str(args.embedding_num))
+print('word vector length: %s.\n' %str(args.embedding_length))
 
 word_vec_list = []
 for idx, word in enumerate(TEXT.vocab.itos):
