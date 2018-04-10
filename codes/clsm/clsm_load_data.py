@@ -62,40 +62,40 @@ def clsm_gen_question_set():
         embedding_dict[word] = wh_instance.hashing(word)
         embedding_length     = len(wh_instance.hashing(word))
     print('embedding_length: %s' %embedding_length)
-    # df_train['query_text']     = df_train['query'].apply(lambda x: ques_dict[x])
-    # df_train['pos_doc_text']   = df_train['pos_doc'].apply(lambda x: ques_dict[x])
-    # df_train['neg_doc_1_text'] = df_train['neg_doc_1'].apply(lambda x: ques_dict[x])
-    # df_train['neg_doc_2_text'] = df_train['neg_doc_2'].apply(lambda x: ques_dict[x])
-    # df_train['neg_doc_3_text'] = df_train['neg_doc_3'].apply(lambda x: ques_dict[x])
-    # df_train['neg_doc_4_text'] = df_train['neg_doc_4'].apply(lambda x: ques_dict[x])
-    # df_train['neg_doc_5_text'] = df_train['neg_doc_5'].apply(lambda x: ques_dict[x])
+    df_train['query_text']     = df_train['query'].apply(lambda x: ques_dict[x])
+    df_train['pos_doc_text']   = df_train['pos_doc'].apply(lambda x: ques_dict[x])
+    df_train['neg_doc_1_text'] = df_train['neg_doc_1'].apply(lambda x: ques_dict[x])
+    df_train['neg_doc_2_text'] = df_train['neg_doc_2'].apply(lambda x: ques_dict[x])
+    df_train['neg_doc_3_text'] = df_train['neg_doc_3'].apply(lambda x: ques_dict[x])
+    df_train['neg_doc_4_text'] = df_train['neg_doc_4'].apply(lambda x: ques_dict[x])
+    df_train['neg_doc_5_text'] = df_train['neg_doc_5'].apply(lambda x: ques_dict[x])
     
-    # df_vali['query_text']     = df_vali['query'].apply(lambda x: ques_dict[x])
-    # df_vali['pos_doc_text']   = df_vali['pos_doc'].apply(lambda x: ques_dict[x])
-    # df_vali['neg_doc_1_text'] = df_vali['neg_doc_1'].apply(lambda x: ques_dict[x])
-    # df_vali['neg_doc_2_text'] = df_vali['neg_doc_2'].apply(lambda x: ques_dict[x])
-    # df_vali['neg_doc_3_text'] = df_vali['neg_doc_3'].apply(lambda x: ques_dict[x])
-    # df_vali['neg_doc_4_text'] = df_vali['neg_doc_4'].apply(lambda x: ques_dict[x])
-    # df_vali['neg_doc_5_text'] = df_vali['neg_doc_5'].apply(lambda x: ques_dict[x])
+    df_vali['query_text']     = df_vali['query'].apply(lambda x: ques_dict[x])
+    df_vali['pos_doc_text']   = df_vali['pos_doc'].apply(lambda x: ques_dict[x])
+    df_vali['neg_doc_1_text'] = df_vali['neg_doc_1'].apply(lambda x: ques_dict[x])
+    df_vali['neg_doc_2_text'] = df_vali['neg_doc_2'].apply(lambda x: ques_dict[x])
+    df_vali['neg_doc_3_text'] = df_vali['neg_doc_3'].apply(lambda x: ques_dict[x])
+    df_vali['neg_doc_4_text'] = df_vali['neg_doc_4'].apply(lambda x: ques_dict[x])
+    df_vali['neg_doc_5_text'] = df_vali['neg_doc_5'].apply(lambda x: ques_dict[x])
     
-    # df_test['ques1_text'] = df_test['qid1'].apply(lambda x: ques_dict[x])
-    # df_test['ques2_text'] = df_test['qid2'].apply(lambda x: ques_dict[x])
+    df_test['ques1_text'] = df_test['qid1'].apply(lambda x: ques_dict[x])
+    df_test['ques2_text'] = df_test['qid2'].apply(lambda x: ques_dict[x])
 
-    # df_train_text = df_train[['query_text', 'pos_doc_text', 'neg_doc_1_text',\
-    #                     'neg_doc_2_text', 'neg_doc_3_text', 'neg_doc_4_text', 'neg_doc_5_text']]
-    # df_train_text.to_csv('../../data/clsm_qoura_train_text.tsv', sep='\t', index=False)
+    df_train_text = df_train[['query_text', 'pos_doc_text', 'neg_doc_1_text',\
+                        'neg_doc_2_text', 'neg_doc_3_text', 'neg_doc_4_text', 'neg_doc_5_text']]
+    df_train_text.to_csv('../../data/clsm_qoura_train_text.tsv', sep='\t', index=False)
     
-    # df_vali_text = df_vali[['query_text', 'pos_doc_text', 'neg_doc_1_text',\
-    #                     'neg_doc_2_text', 'neg_doc_3_text', 'neg_doc_4_text', 'neg_doc_5_text']]
-    # df_vali_text.to_csv('../../data/clsm_qoura_vali_text.tsv', sep='\t', index=False)
+    df_vali_text = df_vali[['query_text', 'pos_doc_text', 'neg_doc_1_text',\
+                        'neg_doc_2_text', 'neg_doc_3_text', 'neg_doc_4_text', 'neg_doc_5_text']]
+    df_vali_text.to_csv('../../data/clsm_qoura_vali_text.tsv', sep='\t', index=False)
     
-    # df_test_text = df_test[['ques1_text', 'ques2_text', 'is_duplicate']]
-    # df_test_text.to_csv('../../data/clsm_qoura_test_text.tsv', sep='\t', index=False)    
+    df_test_text = df_test[['ques1_text', 'ques2_text', 'is_duplicate']]
+    df_test_text.to_csv('../../data/clsm_qoura_test_text.tsv', sep='\t', index=False)    
     
-    # with open('model/embedding_dict.save', 'wb') as f:
-    #     pickle.dump(embedding_dict, f)
-    # with open('model/embedding_length.save', 'wb') as f:
-    #     pickle.dump(embedding_length, f)
+    with open('model/embedding_dict.save', 'wb') as f:
+        pickle.dump(embedding_dict, f)
+    with open('model/embedding_length.save', 'wb') as f:
+        pickle.dump(embedding_length, f)
 
 
 
