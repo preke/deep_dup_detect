@@ -43,9 +43,12 @@ def clsm_gen_question_set():
 
     ques_dict = {}
     for i, r in df.iterrows():
-        ques_dict[r['qid1']] = r['question1'].lower()
-        ques_dict[r['qid2']] = r['question2'].lower()
-
+        try:
+            ques_dict[r['qid1']] = r['question1'].lower()
+            ques_dict[r['qid2']] = r['question2'].lower()
+        except:
+            print(r['question1'])
+            print(r['question2'])
     corpus = []
     for i, r in df_train_new.iterrows():
         corpus += ques_dict[r['query']].split(' ')
