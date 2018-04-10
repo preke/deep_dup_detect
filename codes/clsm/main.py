@@ -61,9 +61,9 @@ args.sementic_size = 128
 if not os.path.exists(embedding_dict_path):
     clsm_gen_question_set()
 else:
-    with open(embedding_dict_path, 'r') as f:
+    with open(embedding_dict_path, 'rb') as f:
         embedding_dict = pickle.load(f)
-    with open(embedding_length_path, 'r') as f:
+    with open(embedding_length_path, 'rb') as f:
         embedding_length = pickle.load(f)
 
 TEXT = data.Field(sequential=True, use_vocab=True, batch_first=True)
