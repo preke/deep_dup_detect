@@ -90,7 +90,7 @@ def clsm_gen_question_set():
                         'neg_doc_2_text', 'neg_doc_3_text', 'neg_doc_4_text', 'neg_doc_5_text']]
     df_vali_text.to_csv('../../data/clsm_qoura_vali_text.tsv', sep='\t', index=False)
     
-    df_test_text = df_test['ques1_text', 'ques2_text', 'is_duplicate']
+    df_test_text = df_test[['ques1_text', 'ques2_text', 'is_duplicate']]
     df_test_text.to_csv('../../data/clsm_qoura_test_text.tsv', sep='\t', index=False)    
     
     with open('model/embedding_dict.save', 'w') as f:
