@@ -7,7 +7,7 @@ def clsm_gen_question_set():
     quora_path = '../../data/quora_duplicate_questions.tsv'
     df = pd.read_csv(quora_path, sep='\t')
     df_pairs = df[['qid1', 'qid2', 'is_duplicate']]
-    
+    length = len(df_pairs)
     df_pairs_train = df_pairs.iloc[:int(length*0.95), :]
     df_test  = df_pairs.iloc[int(length*0.95):, :]
     
