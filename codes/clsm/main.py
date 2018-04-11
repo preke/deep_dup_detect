@@ -73,11 +73,13 @@ TEXT = data.Field(sequential=True, use_vocab=True, batch_first=True)
 label_field  = data.Field(sequential=False)
 train_data = data.TabularDataset(path=Train_path, 
                                  format='TSV',
+                                 skip_header=True,
                                  fields=[('query', TEXT), ('pos_doc', TEXT), ('neg_doc_1', TEXT), 
                                         ('neg_doc_2', TEXT), ('neg_doc_3', TEXT), ('neg_doc_4', TEXT),
                                         ('neg_doc_5', TEXT) ])
 vali_data = data.TabularDataset(path=Vali_path, 
                                  format='TSV',
+                                 skip_header=True,
                                  fields=[('query', TEXT), ('pos_doc', TEXT), ('neg_doc_1', TEXT), 
                                         ('neg_doc_2', TEXT), ('neg_doc_3', TEXT), ('neg_doc_4', TEXT),
                                         ('neg_doc_5', TEXT) ])
@@ -128,6 +130,7 @@ else:
 
 test_data = data.TabularDataset( path=Test_path, 
                                  format='TSV',
+                                 skip_header=True,
                                  fields=[('query', TEXT), ('doc', TEXT), ('label', label_field)])
 label_field.build_vocab(test_data)
 test_iter = data.Iterator(
