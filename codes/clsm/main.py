@@ -24,7 +24,7 @@ parser = argparse.ArgumentParser(description='')
 
 # learning
 parser.add_argument('-lr', type=float, default=0.005, help='initial learning rate [default: 0.001]')
-parser.add_argument('-epochs', type=int, default=10, help='number of epochs for train [default: 256]')
+parser.add_argument('-epochs', type=int, default=5, help='number of epochs for train [default: 256]')
 parser.add_argument('-batch-size', type=int, default=100, help='batch size for training [default: 64]')
 parser.add_argument('-log-interval',  type=int, default=1,   help='how many steps to wait before logging training status [default: 1]')
 parser.add_argument('-test-interval', type=int, default=100, help='how many steps to wait before testing [default: 100]')
@@ -126,8 +126,8 @@ else:
 '''
 
 
-test_data = data.TabularDataset(path=Test_path, 
-                                 format='CSV',
+test_data = data.TabularDataset( path=Test_path, 
+                                 format='TSV',
                                  fields=[('query', TEXT), ('doc', TEXT), ('label', label_field)])
 label_field.build_vocab(test_data)
 test_iter = data.Iterator(

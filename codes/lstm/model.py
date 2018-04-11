@@ -135,10 +135,10 @@ class lstm_attention(lstm)
         return torch.cat(seq_embeddings, dim=1)
     '''
     
-    def attention(self, lstm_out, query):
+    def attention(self, doc_lstm_out, query_lstm_out):
         seq_embeddings = []
-        for query_word_idx in range(query.shape[1]): # shape[0] is the batch size
-            similarities  = F.cosine_similarity(lstm_out, query[query_word_idx].unsqueeze(0), dim=-1)
+        for query_idx in range(doc_lstm_out.shape[1]): # shape[0] is the batch size
+            similarities  = F.cosine_similarity(doc_lstm_out, query[query_word_idx].unsqueeze(0), dim=-1)
             simi_weights  = F.softmax(similarities, dim=1).view(lstm_out.size()[0], -1, 1)
             seq_embedding = simi_weights * lstm_out
             seq_embedding = torch.sum(seq_embedding, dim=1)
