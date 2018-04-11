@@ -49,7 +49,7 @@ class lstm(nn.Module):
 
 class lstm_similarity(lstm):
     def __init__(self, args):
-        super(lstm, self).__init__()
+        super(lstm_similarity, self).__init__()
 
     def forward(self, s1, s2):
         '''
@@ -69,7 +69,7 @@ class lstm_similarity(lstm):
 
 class Bi_lstm(lstm):
     def __init__(self, args):
-        super(lstm, self).__init__()
+        super(Bi_lstm, self).__init__()
         self.bidirectional = True
         self.lstm  = nn.LSTM(input_size=self.D, 
                             hidden_size=self.hidden_dim,
@@ -86,7 +86,7 @@ class Bi_lstm(lstm):
 
 class Bi_lstm_similarity(lstm):
     def __init__(self, args):
-        super(lstm, self).__init__()
+        super(Bi_lstm_similarity, self).__init__()
         self.bidirectional = True
         self.lstm  = nn.LSTM(input_size=self.D, 
                             hidden_size=self.hidden_dim,
@@ -106,5 +106,66 @@ class Bi_lstm_similarity(lstm):
 
         return F.cosine_similarity(s1, s2)
         
+class lstm_attention(lstm)
+    '''
+        In this attention mechanism,
+        we calculate the similarity between 
+        each word in the query and
+        each word in the doc
+
+        output dimention is the word-vec dimention
+    '''
+    def __init__(self, args):
+        super(Bi_lstm_similarity, self).__init__()
+        self.bidirectional = False
+        self.lstm  = nn.LSTM(input_size=self.D, 
+                            hidden_size=self.hidden_dim,
+                            batch_first=True,
+                            num_layers=self.num_layers)
+
+    '''
+    def attention(self, lstm_out, emoji_matrix):
+        seq_embeddings = []
+        for emoji_idx in range(self.emoji_num):
+            similarities = self.cosine_similarity(lstm_out, emoji_matrix[emoji_idx].unsqueeze(0), dim=-1)
+            simi_weights = F.softmax(similarities, dim=1).view(lstm_out.size()[0], -1, 1)
+            seq_embedding = simi_weights * lstm_out
+            seq_embedding = torch.sum(seq_embedding, dim=1)
+            seq_embeddings.append(seq_embedding)
+        return torch.cat(seq_embeddings, dim=1)
+    '''
+    
+    def attention(self, lstm_out, query):
+        seq_embeddings = []
+        for query_word_idx in range(query.shape[1]): # shape[0] is the batch size
+            similarities  = F.cosine_similarity(lstm_out, query[query_word_idx].unsqueeze(0), dim=-1)
+            simi_weights  = F.softmax(similarities, dim=1).view(lstm_out.size()[0], -1, 1)
+            seq_embedding = simi_weights * lstm_out
+            seq_embedding = torch.sum(seq_embedding, dim=1)
+            seq_embeddings.append(seq_embedding)
+        return torch.cat(seq_embeddings, dim=1)
+    
+    def forward(self, query, doc):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

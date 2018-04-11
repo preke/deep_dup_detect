@@ -11,7 +11,7 @@ from word_hashing import WordHashing
 import pickle
 import datetime
 import traceback
-from train import train
+from train import train, test
 from model import CNN_clsm
 
 Train_path = '../../data/clsm_qoura_train_text.tsv'
@@ -24,7 +24,7 @@ parser = argparse.ArgumentParser(description='')
 
 # learning
 parser.add_argument('-lr', type=float, default=0.005, help='initial learning rate [default: 0.001]')
-parser.add_argument('-epochs', type=int, default=25, help='number of epochs for train [default: 256]')
+parser.add_argument('-epochs', type=int, default=10, help='number of epochs for train [default: 256]')
 parser.add_argument('-batch-size', type=int, default=100, help='batch size for training [default: 64]')
 parser.add_argument('-log-interval',  type=int, default=1,   help='how many steps to wait before logging training status [default: 1]')
 parser.add_argument('-test-interval', type=int, default=100, help='how many steps to wait before testing [default: 100]')
