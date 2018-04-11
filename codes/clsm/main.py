@@ -123,7 +123,6 @@ if args.snapshot is not None:
 else:
     train(train_iter=train_iter, vali_iter=vali_iter, model=cnn, args=args)
 
-
 '''
     test
 '''
