@@ -111,6 +111,7 @@ for idx, word in enumerate(TEXT.vocab.itos):
 wordvec_matrix = torch.cat(word_vec_list)
 
 cnn       = CNN_clsm(args, wordvec_matrix)
+
 args.cuda = (not args.no_cuda) and torch.cuda.is_available(); del args.no_cuda
 if args.cuda:
     torch.cuda.set_device(args.device)
