@@ -108,7 +108,9 @@ def test(test_iter, model, args):
             query, doc, label = batch.query, batch.doc, batch.label
             if args.cuda:
                 query, doc, label = query.cuda(), doc.cuda(), label.cuda()
-
+            
+            print([label_field.vocab.itos(i) for i in label])
+            
             results = model(query, doc)
             for i in range(len(label.data)):
                 # print('label:%s\n' %str(label.data[i]))
