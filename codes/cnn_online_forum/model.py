@@ -37,7 +37,7 @@ class CNN_Text(nn.Module):
         q1 = q1.unsqueeze(1)  # (N, Ci, W, D)
         q1 = [F.tanh(conv(q1)).squeeze(3) for conv in self.convs1]  # [(N, Co, W), ...]*len(Ks)
         q1 = [i.size(2) * F.avg_pool1d(i, i.size(2)).squeeze(2) for i in q1]  # [(N, Co), ...]*len(Ks)
-        # q1 = [F.tanh(i) for i in q1]
+        q1 = [F.tanh(i) for i in q1]
         q1 = torch.cat(q1, 1) # 64 * 300
         
         q2 = self.embed(q2)
@@ -46,7 +46,7 @@ class CNN_Text(nn.Module):
         q2 = q2.unsqueeze(1)  # (N, Ci, W, D)
         q2 = [F.tanh(conv(q2)).squeeze(3) for conv in self.convs1]  # [(N, Co, W), ...]*len(Ks)
         q2 = [i.size(2) * F.avg_pool1d(i, i.size(2)).squeeze(2) for i in q2]  # [(N, Co), ...]*len(Ks)
-        # q2 = [F.tanh(i) for i in q2]
+        q2 = [F.tanh(i) for i in q2]
         q2 = torch.cat(q2, 1)
         
         cos_ans = F.cosine_similarity(q1, q2)
