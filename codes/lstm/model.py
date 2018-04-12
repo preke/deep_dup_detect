@@ -107,7 +107,7 @@ class Bi_lstm_similarity(lstm):
 
         return F.cosine_similarity(s1, s2)
         
-class lstm_attention(lstm)
+class lstm_attention(lstm):
     '''
         In this attention mechanism,
         we calculate the similarity between 
@@ -147,6 +147,7 @@ class lstm_attention(lstm)
         return torch.cat(seq_embeddings, dim=1)
     
     def forward(self, query, doc):
+        pass
 
 
 

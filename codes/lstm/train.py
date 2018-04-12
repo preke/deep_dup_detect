@@ -99,9 +99,9 @@ def test(test_iter, model, args):
             a = logit.data[i]
             b = target.data[i]
             corrects = 0
-            if a <= 0 and b == 0:
+            if a < 0.5 and b == 0:
                 corrects += 1
-            elif a > 0 and b == 1:
+            elif a >= 0.5 and b == 1:
                 corrects += 1
         accuracy = 100.0 * corrects/batch.batch_size
         print('\n test acc: %s'%str(accuracy))
