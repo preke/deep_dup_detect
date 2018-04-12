@@ -24,7 +24,6 @@ def train(train_iter, vali_iter, model, args):
         
         for batch in train_iter:
             question1, question2, target = batch.question1, batch.question2, batch.label
-            question1.data.t_(), question2.data.t_()
             if args.cuda:
                 question1, question2, target = question1.cuda(), question2.cuda(), target.cuda()
             optimizer.zero_grad()
@@ -82,7 +81,6 @@ def eval(data_iter, model, args):
     corrects, avg_loss = 0, 0
     for batch in data_iter:
         question1, question2, target = batch.question1, batch.question2, batch.label
-        question1.data.t_(), question2.data.t_()
         if args.cuda:
             question1, question2, target = question1.cuda(), question2.cuda(), target.cuda()
 
@@ -116,7 +114,6 @@ def test(test_iter, model, args):
     threshold = 0.5
     for batch in test_iter:
         question1, question2, label = batch.question1, batch.question2, batch.label
-        question1.data.t_(), question2.data.t_()
         if args.cuda:
             question1, question2, label = question1.cuda(), question2.cuda(), label.cuda()
             
