@@ -34,8 +34,8 @@ parser.add_argument('-shuffle', action='store_true', default=False, help='shuffl
 parser.add_argument('-dropout', type=float, default=0.5, help='the probability for dropout [default: 0.5]')
 parser.add_argument('-max-norm', type=float, default=3.0, help='l2 constraint of parameters [default: 3.0]')
 parser.add_argument('-embed-dim', type=int, default=300, help='number of embedding dimension [default: 300]')
-parser.add_argument('-kernel-num', type=int, default=300, help='number of each kind of kernel')
-parser.add_argument('-kernel-sizes', type=str, default='3', help='comma-separated kernel size to use for convolution')
+parser.add_argument('-kernel-num', type=int, default=100, help='number of each kind of kernel')
+parser.add_argument('-kernel-sizes', type=str, default='3,4,5', help='comma-separated kernel size to use for convolution')
 parser.add_argument('-static', action='store_true', default=False, help='fix the embedding')
 # device
 parser.add_argument('-device', type=int, default=0, help='device to use for iterate data, -1 mean cpu [default: -1]')
@@ -54,8 +54,8 @@ text_field, label_field, train_data, train_iter,\
 text_field.build_vocab(train_data, vali_data, min_freq=5)
 label_field.build_vocab(train_data, vali_data)
 
-args.word_embedding_num = len(text_field.vocab)
-args.word_embedding_length = 300
+args.embed_num = len(text_field.vocab)
+args.embed_dim = 300
 args.word_Embedding = True
 args.pretrained_weight = load_glove_as_dict(glove_path)
 
