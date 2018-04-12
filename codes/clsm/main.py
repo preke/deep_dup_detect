@@ -133,13 +133,17 @@ test_data = data.TabularDataset( path=Test_path,
                                  skip_header=True,
                                  fields=[('query', TEXT), ('doc', TEXT), ('label', label_field)])
 label_field.build_vocab(test_data)
+
+for i in label_field.vocab:
+    print(label_field.vocab.itos(i))
+
 test_iter = data.Iterator(
     test_data,
     batch_size=args.batch_size,
     device=0,
     repeat=False)
 
-test(test_iter=test_iter, model=cnn, args=args)
+# test(test_iter=test_iter, model=cnn, args=args)
 
 
 
