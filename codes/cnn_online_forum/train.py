@@ -39,19 +39,21 @@ def train(train_iter, vali_iter, model, args):
                 记录每次model返回一个pair的相似度
                 手动计算MSE
             '''
-            loss_list = [] 
-            length = len(target.data)
-            for i in range(length):
-                a = logit.data[i]
-                b = target.data[i]
-                loss_list.append(float(0.5*(b-a)*(b-a)))
+            
 
             steps += 1
             if steps % args.log_interval == 0:
                 corrects = 0 
-                for item in loss_list:
-                    if item <= 0.125: # 自己设置的threshold
+                length = len(target.data)
+                for i in range(length):
+                    a = logit.data[i]
+                    b = target.data[i]
+                    if a < 0.5 and b == 0:
                         corrects += 1
+                    elif a >= 0.5 and b == 1:
+                        corrects += 1
+                    else:
+                        pass
                 accuracy = 100.0 * corrects/batch.batch_size
                 sys.stdout.write(
                     '\rBatch[{}] - loss: {:.6f}  acc: {:.4f}%({}/{})'.format(steps, 
@@ -87,16 +89,16 @@ def eval(data_iter, model, args):
         logit = model(question1, question2)
         target = target.type(torch.cuda.FloatTensor)
         criterion = nn.MSELoss()
-        loss_list = []
         length = len(target.data)
         for i in range(length):
             a = logit.data[i]
             b = target.data[i]
-            loss_list.append(float(0.5*(b-a)*(b-a)))
-        for item in loss_list:
-            avg_loss += item 
-            if item <= 0.125:
-                 corrects += 1
+            if a < 0.5 and b == 0:
+                corrects += 1
+            elif a >= 0.5 and b == 1:
+                corrects += 1
+            else:
+                pass
         
     size = float(len(data_iter.dataset))
     avg_loss /= size
