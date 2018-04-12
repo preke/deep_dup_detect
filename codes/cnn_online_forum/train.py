@@ -116,12 +116,12 @@ def test(test_iter, model, args):
         question1, question2, label = batch.question1, batch.question2, batch.label
         if args.cuda:
             question1, question2, label = question1.cuda(), question2.cuda(), label.cuda()
-            
+        label = label.type(torch.cuda.FloatTensor)   
         results = model(question1, question2)
         for i in range(len(label.data)):
-            if (label.data[i] == '1') and (results.data[i] >= threshold):
+            if (label.data[i] == 1) and (results.data[i] >= threshold):
                 accuracy += 1.0
-            elif (label.data[i] == '0') and (results.data[i] < threshold):
+            elif (label.data[i] == 0) and (results.data[i] < threshold):
                 accuracy += 1.0
             else:
                 pass
