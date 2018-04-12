@@ -70,8 +70,9 @@ for idx, word in enumerate(text_field.vocab.itos):
         vector = np.random.rand(1, args.embed_dim)
     word_vec_list.append(torch.from_numpy(vector))
 wordvec_matrix = torch.cat(word_vec_list)
-args.pretrained_weight = wordvec_matrix
 
+args.pretrained_weight = wordvec_matrix
+args.kernel_sizes = [int(k) for k in args.kernel_sizes.split(',')]
 
 
 cnn = model.CNN_Text(args)
