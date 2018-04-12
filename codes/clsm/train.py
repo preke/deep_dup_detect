@@ -112,9 +112,9 @@ def test(test_iter, model, args):
             # print('label:%s\n' %str(label.data[i]))
             # print('results:%s\n' %str(results.data[i]))
 
-            if (label.data[i] == 1) and (results.data[i] > 0):
+            if (label.data[i] == 1) and (results.data[i] >= 0.5):
                 accuracy += 1.0
-            elif (label.data[i] == 2) and (results.data[i] <= 0):
+            elif (label.data[i] == 2) and (results.data[i] < 0.5):
                 accuracy += 1.0
             else:
                 pass

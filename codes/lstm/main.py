@@ -52,6 +52,11 @@ args = parser.parse_args()
 args.save_dir = os.path.join(args.save_dir, datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))   
 args.pretrained_weight = load_glove_as_dict('../../data/wordvec.txt')
 args.word_Embedding = True
+
+
+# lstm
+args.lstm_hidden_dim =  200 
+args.lstm_num_layers = 1
 '''
     begin
 '''
