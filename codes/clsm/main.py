@@ -134,7 +134,7 @@ test_data = data.TabularDataset( path=Test_path,
                                  fields=[('query', TEXT), ('doc', TEXT), ('label', label_field)])
 label_field.build_vocab(test_data)
 
-for idx, word in enumerate(TEXT.vocab.itos):
+for idx, word in enumerate(label_field.vocab.itos):
     print('%s: %s' %(idx, word))
 
 
