@@ -56,7 +56,7 @@ def load_quora(args):
         load as pairs
     '''
     text_field    = data.Field(sequential=True, use_vocab=True, batch_first=True, lower=True)
-    label_field   = data.Field(sequential=False, use_vocab=False)
+    label_field   = data.Field(sequential=False, use_vocab=False, postprocessing=data.Pipeline(lambda x: float(x)))
     pair_id_field = data.Field(sequential=False)
     
     train_data, train_iter = gen_iter(quora_train_path, text_field, label_field, pair_id_field, args)
