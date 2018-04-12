@@ -62,7 +62,10 @@ embedding_dict = load_glove_as_dict(glove_path)
 word_vec_list = []
 for idx, word in enumerate(text_field.vocab.itos):
     if word in embedding_dict:
-        vector = np.array(embedding_dict[word], dtype=float).reshape(1, args.embed_dim)
+        try:
+            vector = np.array(embedding_dict[word], dtype=float).reshape(1, args.embed_dim)
+        except:
+            vector = np.random.rand(1, args.embed_dim)
     else:
         vector = np.random.rand(1, args.embed_dim)
     word_vec_list.append(torch.from_numpy(vector))
