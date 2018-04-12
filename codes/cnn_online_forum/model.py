@@ -4,6 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
 from math import sqrt
+import numpy as np
 
 class CNN_Text(nn.Module):
     def __init__(self, args):
