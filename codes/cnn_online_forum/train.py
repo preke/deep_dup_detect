@@ -22,7 +22,7 @@ def train(train_iter, vali_iter, model, args):
         print('\nEpoch:%s\n'%epoch)
         
         
-        for batch in iter(train_iter):
+        for batch in train_iter:
             question1, question2, target = batch.question1, batch.question2, batch.label
             feature1.data.t_(), feature2.data.t_()
             if args.cuda:
