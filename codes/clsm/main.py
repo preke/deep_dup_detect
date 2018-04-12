@@ -133,9 +133,10 @@ test_data = data.TabularDataset( path=Test_path,
                                  skip_header=True,
                                  fields=[('query', TEXT), ('doc', TEXT), ('label', label_field)])
 label_field.build_vocab(test_data)
-print(label_field.vocab.stoi['1'])
-print(label_field.vocab.stoi['0'])
-print(len(label_field.vocab))
+
+for idx, word in enumerate(TEXT.vocab.itos):
+    print('%s: %s' %(idx, word))
+
 
 
 test_iter = data.Iterator(
