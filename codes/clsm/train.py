@@ -99,7 +99,7 @@ def eval(vali_iter, model, args):
         loss = criterion(log_softmax(results), target)
         return loss
 
-def test(test_iter, model, args):
+def test(test_iter, label_field, model, args):
     accuracy = 0.0
     total_num = 0.0
     thresholds = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]

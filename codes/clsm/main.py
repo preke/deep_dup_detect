@@ -143,7 +143,7 @@ test_iter = data.Iterator(
     device=0,
     repeat=False)
 
-test(test_iter=test_iter, model=cnn, args=args)
+test(test_iter=test_iter, label_field=label_field, model=cnn, args=args)
 
 
 
