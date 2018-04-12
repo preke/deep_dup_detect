@@ -22,7 +22,7 @@ def train(train_iter, vali_iter, model, args):
         print('\nEpoch:%s\n'%epoch)
         
         
-        for batch in train_iter:
+        for batch in iter(train_iter):
             question1, question2, target = batch.question1, batch.question2, batch.label
             feature1.data.t_(), feature2.data.t_(), target.data.sub_(1)
             if args.cuda:
@@ -115,15 +115,15 @@ def test(test_iter, model, args):
     threshold = 0.5
     for batch in test_iter:
         question1, question2, target = batch.question1, batch.question2, batch.label
-        feature1.data.t_(), feature2.data.t_(), target.data.sub_(1)
+        feature1.data.t_(), feature2.data.t_()
         if args.cuda:
             question1, question2, target = question1.cuda(), question2.cuda(), target.cuda()
             
         results = model(question1, question2)
         for i in range(len(label.data)):
-            if (label.data[i] == 1) and (results.data[i] >= threshold):
+            if (label.data[i] == '1') and (results.data[i] >= threshold):
                 accuracy += 1.0
-            elif (label.data[i] == 0) and (results.data[i] < threshold):
+            elif (label.data[i] == '0') and (results.data[i] < threshold):
                 accuracy += 1.0
             else:
                 pass

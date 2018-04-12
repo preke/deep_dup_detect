@@ -52,7 +52,7 @@ text_field, label_field, train_data, train_iter,\
     vali_data, vali_iter, test_data, test_iter = load_quora(args)
 
 text_field.build_vocab(train_data, vali_data, min_freq=5)
-label_field.build_vocab(train_data, vali_data)
+# label_field.build_vocab(train_data, vali_data)
 
 args.embed_num = len(text_field.vocab)
 args.embed_dim = 300
