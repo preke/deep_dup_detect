@@ -11,7 +11,7 @@ import os
 import datetime
 import traceback
 import model
-import train
+from train import train, test
 
 
 glove_path = '../../data/wordvec.txt'
