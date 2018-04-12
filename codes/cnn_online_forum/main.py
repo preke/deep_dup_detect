@@ -5,7 +5,7 @@ import torch
 import torchtext.data as data
 import torchtext.datasets as datasets
 import argparse
-from load_data import load_data
+from load_data import load_quora, load_glove_as_dict
 import mydatasets
 import os
 import datetime
@@ -14,8 +14,9 @@ import model
 import train
 
 
-# 参数设置：
+glove_path = '../../data/wordvec.txt'
 
+# 参数设置：
 parser = argparse.ArgumentParser(description='')
 # learning
 parser.add_argument('-lr', type=float, default=0.005, help='initial learning rate [default: 0.001]')
@@ -47,105 +48,45 @@ args = parser.parse_args()
 
 
 # load data
+text_field, label_field, train_data, train_iter,\
+    vali_data, vali_iter, test_data, test_iter = load_quora(args)
 
-
-print("\nLoading data...")
-load_data('../datas/hdfs.csv', prefix = 'SPARK')
-issue1_field = data.Field(lower=True)
-issue2_field = data.Field(lower=True)
-label_field  = data.Field(sequential=False)
-
-# pairid 是 后面匹配传统特征时用到，这里暂时不管就好
-pairid_field = data.Field(lower=True)
-
-train_data, vali_data = mydatasets.Split_Data.splits(issue1_field, issue2_field, label_field, pairid_field)
-
-issue1_field.build_vocab(train_data, vali_data)
-issue2_field.build_vocab(train_data, vali_data)
+text_field.build_vocab(train_data, vali_data, min_freq=5)
 label_field.build_vocab(train_data, vali_data)
-pairid_field.build_vocab(train_data, vali_data)
 
-train_iter, vali_iter = data.Iterator.splits(
-                            (train_data, vali_data), 
-                            batch_sizes=(args.batch_size, len(vali_data)),device=-1, repeat=False)
+args.word_embedding_num = len(text_field.vocab)
+args.word_embedding_length = 300
+args.word_Embedding = True
+args.pretrained_weight = load_glove_as_dict(glove_path)
 
-args.embed_num    = len(issue1_field.vocab) + len(issue2_field.vocab)
-args.class_num    = len(label_field.vocab) - 1
-args.cuda         = (not args.no_cuda) and torch.cuda.is_available(); del args.no_cuda
-args.kernel_sizes = [int(k) for k in args.kernel_sizes.split(',')]
-args.save_dir     = os.path.join(args.save_dir, datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
 
-print("\nParameters:")
-for attr, value in sorted(args.__dict__.items()):
-    print("\t{}={}".format(attr.upper(), value))
 
-# model
 cnn = model.CNN_Text(args)
+args.cuda = (not args.no_cuda) and torch.cuda.is_available(); del args.no_cuda
 if args.snapshot is not None:
     print('\nLoading model from {}...'.format(args.snapshot))
     cnn.load_state_dict(torch.load(args.snapshot))
 
-if args.cuda:
-    torch.cuda.set_device(args.device)
-    cnn = cnn.cuda()
+if args.snapshot is not None:
+    print('\nLoading model from {}...'.format(args.snapshot))
+    lstm_sim.load_state_dict(torch.load(args.snapshot))
+    if args.cuda:
+        torch.cuda.set_device(args.device)
+        cnn = cnn.cuda()
+else:
+    try:
+        train(train_iter=train_iter, vali_iter=vali_iter, model=cnn, args=args)
+    except KeyboardInterrupt:
+        print(traceback.print_exc())
+        print('\n' + '-' * 89)
+        print('Exiting from training early')
 
- 
-try:
-    train.train(train_iter, vali_iter, cnn, args)
-except KeyboardInterrupt:
-    print(traceback.print_exc())
-    print('\n' + '-' * 89)
-    print('Exiting from training early')
+test(test_iter=test_iter, model=cnn, args=args)
 
 
-'''
-try:
-    train.eval_test(test_iter, cnn, args) 
-except:
-    print('test_wrong')
-'''
 
-'''
-    以下是测试部分
-    输入文件为测试集
-    每一行为 :
-    index, issue1, issue2, label
-'''
-count  = 0
-acc    = 0
-tp     = 0
-pred_p = 0
-real_p = 0
 
-with open('/datas/cnn_test.csv') as f:
-    for line in f.readlines():
-        if count == 0:
-            count += 1
-            continue
-        try:
-            label = train.predict(line, cnn, issue1_field, issue2_field, label_field, args.cuda)
-            if label >= 0.5:
-                if line.split(',')[3].strip() == '1.0':
-                    acc += 1
-                    tp  += 1
-                
-                pred_p += 1
-            
-            elif (label < 0.5) & (line.split(',')[3].strip()  == '0.0'):
-                acc += 1
-            
-            count += 1
-            if line.split(',')[3].strip() == '1.0':
-                real_p += 1 
-        except:
-            print(line.split(',')[0], line)
 
-p = float(tp)/pred_p
-r = float(tp)/real_p
 
-print('acc: {:.6f}'.format(float(acc)/count))
-print('f1: {:.6f}'.format(2*p*r/(p+r)))
-    
-    
-    
+
 

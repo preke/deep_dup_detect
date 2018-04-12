@@ -6,7 +6,6 @@ from torch.autograd import Variable
 from math import sqrt
 
 class CNN_Text(nn.Module):
-    
     def __init__(self, args):
         super(CNN_Text, self).__init__()
         self.args = args
@@ -19,6 +18,13 @@ class CNN_Text(nn.Module):
         Ks = args.kernel_sizes
 
         self.embed = nn.Embedding(V, D)
+
+        # use pre-trained
+        if args.word_Embedding:
+            pretrained_weight = np.array(args.pretrained_weight)
+            self.embed.weight.data.copy_(torch.from_numpy(pretrained_weight))
+        
+
         self.convs1 = nn.ModuleList([nn.Conv2d(Ci, Co, (K, D)) for K in Ks])
         self.dropout = nn.Dropout(args.dropout, self.training)
         self.fc1 = nn.Linear(1, 1)
