@@ -55,7 +55,7 @@ def load_quora(args):
     '''
         load as pairs
     '''
-    text_field    = data.Field(sequential=True, use_vocab=True, batch_first=True)
+    text_field    = data.Field(sequential=True, use_vocab=True, batch_first=True, lower=True)
     label_field   = data.Field(sequential=False)
     pair_id_field = data.Field(sequential=False)
     

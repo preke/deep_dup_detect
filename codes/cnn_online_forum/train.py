@@ -24,7 +24,7 @@ def train(train_iter, vali_iter, model, args):
         
         for batch in iter(train_iter):
             question1, question2, target = batch.question1, batch.question2, batch.label
-            feature1.data.t_(), feature2.data.t_(), target.data.sub_(1)
+            feature1.data.t_(), feature2.data.t_()
             if args.cuda:
                 question1, question2, target = question1.cuda(), question2.cuda(), target.cuda()
             optimizer.zero_grad()
@@ -80,7 +80,7 @@ def eval(data_iter, model, args):
     corrects, avg_loss = 0, 0
     for batch in data_iter:
         question1, question2, target = batch.question1, batch.question2, batch.label
-        feature1.data.t_(), feature2.data.t_(), target.data.sub_(1)
+        feature1.data.t_(), feature2.data.t_()
         if args.cuda:
             question1, question2, target = question1.cuda(), question2.cuda(), target.cuda()
 
