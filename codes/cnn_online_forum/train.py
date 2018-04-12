@@ -47,9 +47,9 @@ def train(train_iter, vali_iter, model, args):
                 for i in range(length):
                     a = logit.data[i]
                     b = target.data[i]
-                    if a < 0.5 and b == 0:
+                    if a < 0.6 and b == 0:
                         corrects += 1
-                    elif a >= 0.5 and b == 1:
+                    elif a >= 0.6 and b == 1:
                         corrects += 1
                     else:
                         pass
@@ -91,9 +91,9 @@ def eval(data_iter, model, args):
         for i in range(length):
             a = logit.data[i]
             b = target.data[i]
-            if a < 0.5 and b == 0:
+            if a < 0.6 and b == 0:
                 corrects += 1
-            elif a >= 0.5 and b == 1:
+            elif a >= 0.6 and b == 1:
                 corrects += 1
             else:
                 pass
@@ -111,7 +111,7 @@ def eval(data_iter, model, args):
 def test(test_iter, model, args):
     accuracy = 0.0
     total_num = 0.0
-    threshold = 0.5
+    threshold = 0.6
     for batch in test_iter:
         question1, question2, label = batch.question1, batch.question2, batch.label
         if args.cuda:
