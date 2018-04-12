@@ -100,10 +100,11 @@ def eval(vali_iter, model, args):
         return loss
 
 def test(test_iter, model, args):
-    accuracy = 0.0
-    total_num = 0.0
+    
     thresholds = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
     for threshold in thresholds:
+        accuracy = 0.0
+        total_num = 0.0
         for batch in test_iter:
             query, doc, label = batch.query, batch.doc, batch.label
             if args.cuda:
