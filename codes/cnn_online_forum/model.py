@@ -50,5 +50,6 @@ class CNN_Text(nn.Module):
         q2 = torch.cat(q2, 1)
         
         cos_ans = F.cosine_similarity(q1, q2)
+        cos_ans = Variable(torch.abs(cos_ans.data))
         return cos_ans
 

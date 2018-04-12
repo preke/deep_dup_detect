@@ -19,7 +19,7 @@ glove_path = '../../data/wordvec.txt'
 # 参数设置：
 parser = argparse.ArgumentParser(description='')
 # learning
-parser.add_argument('-lr', type=float, default=0.1, help='initial learning rate [default: 0.001]')
+parser.add_argument('-lr', type=float, default=0.05, help='initial learning rate [default: 0.001]')
 parser.add_argument('-epochs', type=int, default=256, help='number of epochs for train [default: 256]')
 parser.add_argument('-batch-size', type=int, default=64, help='batch size for training [default: 64]')
 parser.add_argument('-log-interval',  type=int, default=1,   help='how many steps to wait before logging training status [default: 1]')
