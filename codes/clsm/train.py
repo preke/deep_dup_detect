@@ -102,27 +102,29 @@ def eval(vali_iter, model, args):
 def test(test_iter, model, args):
     accuracy = 0.0
     total_num = 0.0
-    for batch in test_iter:
-        query, doc, label = batch.query, batch.doc, batch.label
-        if args.cuda:
-            query, doc, label = query.cuda(), doc.cuda(), label.cuda()
+    thresholds = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+    for threshold in thresholds:
+        for batch in test_iter:
+            query, doc, label = batch.query, batch.doc, batch.label
+            if args.cuda:
+                query, doc, label = query.cuda(), doc.cuda(), label.cuda()
 
-        results = model(query, doc)
-        for i in range(len(label.data)):
-            # print('label:%s\n' %str(label.data[i]))
-            # print('results:%s\n' %str(results.data[i]))
+            results = model(query, doc)
+            for i in range(len(label.data)):
+                # print('label:%s\n' %str(label.data[i]))
+                # print('results:%s\n' %str(results.data[i]))
 
-            if (label.data[i] == 1) and (results.data[i] >= 0.5):
-                accuracy += 1.0
-            elif (label.data[i] == 2) and (results.data[i] < 0.5):
-                accuracy += 1.0
-            else:
-                pass
-        
-        total_num += len(label.data)
-    print(accuracy)
-    print(total_num)
-    print('Accuracy is: %s' %str(accuracy/total_num))
+                if (label.data[i] == 1) and (results.data[i] >= threshold):
+                    accuracy += 1.0
+                elif (label.data[i] == 2) and (results.data[i] < threshold):
+                    accuracy += 1.0
+                else:
+                    pass
+            
+            total_num += len(label.data)
+        # print(accuracy)
+        # print(total_num)
+        print('Threshold is: %s, Accuracy is: %s' %(str(threshold), str(accuracy/total_num)))
 
 
 
