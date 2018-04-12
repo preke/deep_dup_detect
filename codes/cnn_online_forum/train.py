@@ -24,7 +24,7 @@ def train(train_iter, vali_iter, model, args):
         
         for batch in train_iter:
             question1, question2, target = batch.question1, batch.question2, batch.label
-            # feature1.data.t_(), feature2.data.t_()
+            question1.data.t_(), question2.data.t_()
             if args.cuda:
                 question1, question2, target = question1.cuda(), question2.cuda(), target.cuda()
             optimizer.zero_grad()
@@ -80,7 +80,7 @@ def eval(data_iter, model, args):
     corrects, avg_loss = 0, 0
     for batch in data_iter:
         question1, question2, target = batch.question1, batch.question2, batch.label
-        # feature1.data.t_(), feature2.data.t_()
+        question1.data.t_(), question2.data.t_()
         if args.cuda:
             question1, question2, target = question1.cuda(), question2.cuda(), target.cuda()
 
@@ -93,12 +93,11 @@ def eval(data_iter, model, args):
             a = logit.data[i]
             b = target.data[i]
             loss_list.append(float(0.5*(b-a)*(b-a)))
-        corrects = 0
         for item in loss_list:
             avg_loss += item 
             if item <= 0.125:
                  corrects += 1
-        accuracy = 100.0 * float(corrects)/batch.batch_size 
+        
     size = float(len(data_iter.dataset))
     avg_loss /= size
     accuracy = 100.0 * float(corrects)/size
@@ -114,10 +113,10 @@ def test(test_iter, model, args):
     total_num = 0.0
     threshold = 0.5
     for batch in test_iter:
-        question1, question2, target = batch.question1, batch.question2, batch.label
-        # feature1.data.t_(), feature2.data.t_()
+        question1, question2, label = batch.question1, batch.question2, batch.label
+        question1.data.t_(), question2.data.t_()
         if args.cuda:
-            question1, question2, target = question1.cuda(), question2.cuda(), target.cuda()
+            question1, question2, label = question1.cuda(), question2.cuda(), label.cuda()
             
         results = model(question1, question2)
         for i in range(len(label.data)):
