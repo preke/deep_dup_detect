@@ -26,7 +26,7 @@ class CNN_Text(nn.Module):
         
 
         self.convs1 = nn.ModuleList([nn.Conv2d(Ci, Co, (K, D)) for K in Ks])
-        self.dropout = nn.Dropout(args.dropout, self.training)
+        self.dropout = nn.Dropout(args.dropout)
         self.fc1 = nn.Linear(1, 1)
 
     def forward(self, q1, q2):
