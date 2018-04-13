@@ -74,8 +74,8 @@ class CNN_Sim(nn.Module):
         super(CNN_Sim, self).__init__()
 
     def forward(self, q1, q2):
-        cnn1 = CNN_Text()
-        cnn2 = CNN_Text()
+        cnn1 = CNN_Text(args)
+        cnn2 = CNN_Text(args)
         q1 = cnn1.forward(q1)
         q2 = cnn2.forward(q2)
         cos_ans = F.cosine_similarity(q1, q2)
