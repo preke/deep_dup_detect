@@ -69,7 +69,7 @@ def train(train_iter, vali_iter, model, args):
                     best_acc = vali_acc
                     last_step = steps
                     if args.save_best:
-                        save(model, args.save_dir, 'best', steps)
+                        save(model, args.save_dir, 'best', steps, best_acc)
                 else:
                     if steps - last_step >= args.early_stop:
                         print('early stop by {} steps.'.format(args.early_stop))
@@ -138,9 +138,9 @@ def test(test_iter, model, args):
     print('Threshold is: %s, Accuracy is: %s' %(str(threshold), str(accuracy/total_num)))
 
 
-def save(model, save_dir, save_prefix, steps):
+def save(model, save_dir, save_prefix, steps, acc):
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir)
     save_prefix = os.path.join(save_dir, save_prefix)
-    save_path = '{}_steps_{}.pt'.format(save_prefix, steps)
+    save_path = '{}_steps_{}_{}.pt'.format(save_prefix, steps, acc)
     torch.save(model.state_dict(), save_path)
