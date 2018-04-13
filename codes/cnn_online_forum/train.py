@@ -46,6 +46,7 @@ def train(train_iter, vali_iter, model, args):
                 length = len(target.data)
                 for i in range(length):
                     a = logit.data[i]
+
                     b = target.data[i]
                     if a < 0.6 and b == 0:
                         corrects += 1
@@ -77,6 +78,7 @@ def train(train_iter, vali_iter, model, args):
 
 
 def eval(data_iter, model, args):
+    loss_fp = open('loss.txt','a')
     model.eval()
     corrects, avg_loss = 0, 0
     for batch in data_iter:
@@ -90,6 +92,7 @@ def eval(data_iter, model, args):
         length = len(target.data)
         for i in range(length):
             a = logit.data[i]
+            loss_fp.write(a)
             b = target.data[i]
             if a < 0.6 and b == 0:
                 corrects += 1
@@ -105,6 +108,7 @@ def eval(data_iter, model, args):
                                                                        accuracy, 
                                                                        corrects, 
                                                                        size))
+    loss_fp.close()
     return accuracy
 
 
