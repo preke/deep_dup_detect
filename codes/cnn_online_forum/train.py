@@ -17,11 +17,11 @@ def train(train_iter, vali_iter, model, args):
     last_step = 0
     
     # epoch 是 训练的 round
-    model.train()
+    
     for epoch in range(1, args.epochs+1): 
         print('\nEpoch:%s\n'%epoch)
         
-        
+        model.train()
         for batch in train_iter:
             question1, question2, target = batch.question1, batch.question2, batch.label
             if args.cuda:
@@ -31,6 +31,7 @@ def train(train_iter, vali_iter, model, args):
             target = target.type(torch.cuda.FloatTensor)
             criterion = nn.MSELoss()
             loss = criterion(logit, target)
+            print('loss: %s' %str(type(loss)))
             loss.backward()
             optimizer.step()
             
