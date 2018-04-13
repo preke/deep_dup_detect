@@ -94,7 +94,7 @@ else:
         print('\n' + '-' * 89)
         print('Exiting from training early')
 
-test(test_iter=test_iter, model=cnn args=args)
+test(test_iter=test_iter, model=cnn, args=args)
 
 
 
