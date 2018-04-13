@@ -75,7 +75,7 @@ args.pretrained_weight = wordvec_matrix
 args.kernel_sizes = [int(k) for k in args.kernel_sizes.split(',')]
 
 
-cnn1 = model.CNN_Sim(args)
+cnn = model.CNN_Sim(args)
 args.cuda = (not args.no_cuda) and torch.cuda.is_available(); del args.no_cuda
 
 
