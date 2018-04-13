@@ -75,8 +75,9 @@ args.pretrained_weight = wordvec_matrix
 args.kernel_sizes = [int(k) for k in args.kernel_sizes.split(',')]
 
 
-cnn = model.CNN_Text(args)
+cnn1 = model.CNN_Sim(args)
 args.cuda = (not args.no_cuda) and torch.cuda.is_available(); del args.no_cuda
+
 
 if args.snapshot is not None:
     print('\nLoading model from {}...'.format(args.snapshot))
@@ -84,6 +85,7 @@ if args.snapshot is not None:
     if args.cuda:
         torch.cuda.set_device(args.device)
         cnn = cnn.cuda()
+        
 else:
     try:
         train(train_iter=train_iter, vali_iter=vali_iter, model=cnn, args=args)
@@ -92,7 +94,7 @@ else:
         print('\n' + '-' * 89)
         print('Exiting from training early')
 
-test(test_iter=test_iter, model=cnn, args=args)
+test(test_iter=test_iter, model=cnn args=args)
 
 
 
