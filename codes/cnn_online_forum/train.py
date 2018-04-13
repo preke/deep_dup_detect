@@ -11,7 +11,7 @@ import traceback
 def train(train_iter, vali_iter, model, args):
     if args.cuda:
         model.cuda()
-    parameters = nn.ParameterList(list(filter(lambda p: p.requires_grad, model.parameters())))
+    parameters = list(filter(lambda p: p.requires_grad, model.parameters()))
     optimizer = torch.optim.Adam(parameters, lr=args.lr)
     steps = 0
     best_acc = 0
