@@ -17,15 +17,11 @@ class CNN_Text(nn.Module):
         Ci = 1
         Co = args.kernel_num
         Ks = args.kernel_sizes
-
         self.embed = nn.Embedding(V, D)
-
         # use pre-trained
         if args.word_Embedding:
             # pass
             self.embed.weight.data.copy_(args.pretrained_weight)
-        
-
         self.convs1 = nn.ModuleList([nn.Conv2d(Ci, Co, (K, D)) for K in Ks])
         self.dropout = nn.Dropout(args.dropout)
         self.fc1 = nn.Linear(1, 1)
@@ -72,11 +68,11 @@ class CNN_Text(nn.Module):
 class CNN_Sim(nn.Module):
     def __init__(self, args):
         super(CNN_Sim, self).__init__()
-        self.cnn = CNN_Text(args)
-
+        self.cnn1 = CNN_Text(args)
+        self.cnn2 = CNN_Text(args)
     def forward(self, q1, q2):
-        cnn1 = self.cnn
-        cnn2 = self.cnn
+        cnn1 = self.cnn1
+        cnn2 = self.cnn2
         q1 = cnn1.forward(q1)
         q2 = cnn2.forward(q2)
         cos_ans = F.cosine_similarity(q1, q2)
