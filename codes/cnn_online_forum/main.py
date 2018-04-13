@@ -77,7 +77,9 @@ args.kernel_sizes = [int(k) for k in args.kernel_sizes.split(',')]
 
 cnn = model.CNN_Sim(args)
 args.cuda = (not args.no_cuda) and torch.cuda.is_available(); del args.no_cuda
-
+if args.cuda:
+        torch.cuda.set_device(args.device)
+        cnn = cnn.cuda()
 
 if args.snapshot is not None:
     print('\nLoading model from {}...'.format(args.snapshot))
