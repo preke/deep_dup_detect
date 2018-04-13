@@ -44,7 +44,7 @@ def gen_iter(path, text_field, label_field, pair_id_field, args):
                                     ('question2', text_field),
                                     ('pair_id', pair_id_field)])
 
-    tmp_iter = data.Iterator(
+    tmp_iter = data.BucketIterator(
                     tmp_data,
                     batch_size=args.batch_size,
                     device=0,

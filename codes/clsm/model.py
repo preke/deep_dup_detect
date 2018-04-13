@@ -21,9 +21,7 @@ class CNN_clsm(nn.Module):
 
         self.embedding = nn.Embedding(V, D)
         self.embedding.weight.data.copy_(wordvec_matrix)
-
         self.embedding.weight.requires_grad = False
-
         self.conv    = nn.Conv2d(Ci, Co, (K, D))
         self.dropout = nn.Dropout(args.dropout, self.training)
         self.fc      = nn.Linear(Co, Ss)
@@ -43,18 +41,20 @@ class CNN_clsm(nn.Module):
         sentences_batch = self.fc(sentences_batch)
         return sentences_batch        
 
-    def forward(self, query, doc):
-        '''
-            Input a query and doc,
-            return the similarity in sementic layer
-        '''
+    def forward(self, query):
         query   = self.embedding(query)
-        # query   = Variable(query)
-        doc     = self.embedding(doc)
-        # doc     = Variable(doc)
         query   = self.conv_and_pool(query)
-        doc     = self.conv_and_pool(doc)
-        gamma   = 0.1 # Variable(torch.FloatTensor()) # smoothing factor
-        # gamma   = gamma.cuda() if self.args.cuda else gamma
-        cos_sim = gamma * F.cosine_similarity(query, doc)
-        return cos_sim
+        return query
+
+class CNN_Sim(nn.Module):
+    def __init__(self, args, wordvec_matrix):
+        super(CNN_Sim, self).__init__()
+        self.cnn1 = CNN_clsm(args, wordvec_matrix)
+        self.cnn2 = CNN_clsm(args, wordvec_matrix)
+    def forward(self, q1, q2):
+        q1 = self.cnn1.forward(q1)
+        q2 = self.cnn2.forward(q2)
+        cos_ans = F.cosine_similarity(q1, q2)
+        # ignore Gamma
+        return cos_ans
+
