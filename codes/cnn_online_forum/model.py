@@ -80,7 +80,7 @@ class CNN_Sim(nn.Module):
         q1 = cnn1.forward(q1)
         q2 = cnn2.forward(q2)
         cos_ans = F.cosine_similarity(q1, q2)
-        print(type(cos_ans))
+        # print(type(cos_ans))
         return cos_ans
 
 
