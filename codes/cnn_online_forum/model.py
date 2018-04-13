@@ -22,8 +22,8 @@ class CNN_Text(nn.Module):
 
         # use pre-trained
         if args.word_Embedding:
-            pass
-            # self.embed.weight.data.copy_(args.pretrained_weight)
+            # pass
+            self.embed.weight.data.copy_(args.pretrained_weight)
         
 
         self.convs1 = nn.ModuleList([nn.Conv2d(Ci, Co, (K, D)) for K in Ks])
