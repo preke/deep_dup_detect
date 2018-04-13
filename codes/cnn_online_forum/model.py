@@ -22,7 +22,8 @@ class CNN_Text(nn.Module):
 
         # use pre-trained
         if args.word_Embedding:
-            self.embed.weight.data.copy_(args.pretrained_weight)
+            pass
+            # self.embed.weight.data.copy_(args.pretrained_weight)
         
 
         self.convs1 = nn.ModuleList([nn.Conv2d(Ci, Co, (K, D)) for K in Ks])
@@ -32,7 +33,6 @@ class CNN_Text(nn.Module):
     def forward(self, q1, q2):
 
         q1 = self.embed(q1)
-        print('q1: %s' %str(type(q1)))
         # if self.args.static:
         #     q1 = Variable(q1)
         q1 = q1.unsqueeze(1)  # (N, Ci, W, D)
@@ -51,7 +51,7 @@ class CNN_Text(nn.Module):
         q2 = torch.cat(q2, 1)
         
         cos_ans = F.cosine_similarity(q1, q2)
-        print('cos_ans: %s' %str(type(cos_ans)))
+
         # cos_ans = F.sigmoid(cos_ans)
         return cos_ans
 

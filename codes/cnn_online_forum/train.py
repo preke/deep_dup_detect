@@ -31,7 +31,6 @@ def train(train_iter, vali_iter, model, args):
             target = target.type(torch.cuda.FloatTensor)
             criterion = nn.MSELoss()
             loss = criterion(logit, target)
-            print('loss: %s' %str(type(loss)))
             loss.backward()
             optimizer.step()
             
