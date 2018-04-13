@@ -47,7 +47,7 @@ def gen_iter(path, text_field, label_field, pair_id_field, args):
     tmp_iter = data.BucketIterator(
                     tmp_data,
                     batch_size=args.batch_size,
-                    sort_key=lambda x: len(x),
+                    sort_key=lambda x: len(x.question1) + len(x.question2),
                     device=0,
                     repeat=False)
     return tmp_data, tmp_iter
