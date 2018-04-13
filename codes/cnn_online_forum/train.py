@@ -90,7 +90,6 @@ def eval(data_iter, model, args):
 
         logit = model(question1, question2)
         target = target.type(torch.cuda.FloatTensor)
-        criterion = nn.MSELoss()
         length = len(target.data)
         for i in range(length):
             a = logit.data[i]

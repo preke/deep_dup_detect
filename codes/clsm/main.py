@@ -80,19 +80,22 @@ train_data = data.TabularDataset(path=Train_path,
 vali_data = data.TabularDataset(path=Vali_path, 
                                  format='TSV',
                                  skip_header=True,
-                                 fields=[('query', TEXT), ('pos_doc', TEXT), ('neg_doc_1', TEXT), 
-                                        ('neg_doc_2', TEXT), ('neg_doc_3', TEXT), ('neg_doc_4', TEXT),
-                                        ('neg_doc_5', TEXT) ])
+                                 fields=[('query', TEXT), ('doc', TEXT), ('label', label_field)])
 TEXT.build_vocab(train_data, vali_data)
+label_field.build_vocab(vali_data)
 
-train_iter = data.Iterator(
+train_iter = data.BucketIterator(
     train_data,
     batch_size=args.batch_size,
     device=0,
+    sort_key=(lambda x: len(x.query) + len(pos_doc) + len(neg_doc_1)\
+                + len(neg_doc_2) + len(neg_doc_3) + len(neg_doc_4)\
+                + len(neg_doc_5))
     repeat=False)
-vali_iter = data.Iterator(
+vali_iter = data.BucketIterator(
     vali_data, 
     batch_size=args.batch_size,
+    sort_key=(lambda x: len(x.query) + len(doc))
     device=0,
     repeat=False)
 
@@ -132,7 +135,7 @@ test_data = data.TabularDataset( path=Test_path,
                                  format='TSV',
                                  skip_header=True,
                                  fields=[('query', TEXT), ('doc', TEXT), ('label', label_field)])
-label_field.build_vocab(test_data)
+
 
 for idx, word in enumerate(label_field.vocab.itos):
     print('%s: %s' %(idx, word))

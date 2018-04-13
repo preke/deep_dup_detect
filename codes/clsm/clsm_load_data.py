@@ -3,14 +3,30 @@ import numpy as np
 from word_hashing import WordHashing
 import pickle
 
-def clsm_gen_question_set():
-    quora_path = '../../data/quora_duplicate_questions.tsv'
+
+quora_path            = '../../data/quora_duplicate_questions.tsv'
+qoura_dup_path        = '../../data/clsm_quora_dup.tsv'
+qoura_train_path      = '../../data/clsm_qoura_train.tsv'
+qoura_vali_path       = '../../data/clsm_qoura_vali.tsv'
+qoura_test_path       = '../../data/clsm_qoura_test.tsv'
+
+qoura_train_text_path = '../../data/clsm_qoura_train_text.tsv'
+qoura_vali_text_path  = '../../data/clsm_qoura_vali_text.tsv'
+qoura_test_text_path  = '../../data/clsm_qoura_test_text.tsv'
+
+embedding_dict_path   = 'model/embedding_dict.save'
+embedding_length_path = 'model/embedding_length.save'
+
+
+def clsm_gen_question_set():    
     df = pd.read_csv(quora_path, sep='\t')
     df_pairs = df[['qid1', 'qid2', 'is_duplicate']]
     length = len(df_pairs)
-    df_pairs_train = df_pairs.iloc[:int(length*0.95), :]
-    df_test  = df_pairs.iloc[int(length*0.95):, :]
     
+    # Train_vali_test split now
+    df_pairs_train = df_pairs.iloc[:int(length*0.95), :]
+    df_vali  = df_pairs.iloc[int(length*0.95):int(length*0.975), :]
+    df_test  = df_pairs.iloc[int(length*0.975):, :]
     
     df_pos = df_pairs_train[df_pairs_train['is_duplicate'] == 1]
     
@@ -19,12 +35,10 @@ def clsm_gen_question_set():
         if r['qid1'] < r['qid2']:
             df_dup.append([r['qid1'], r['qid2'], 1])
     df_dup = pd.DataFrame(df_dup, columns=['qid1', 'qid2', 'is_duplicate'])
-    # print('df_dup shape: ', df_dup.shape)
-    df_dup.to_csv('../../data/clsm_quora_dup.tsv', sep='\t', index=False)
+    df_dup.to_csv(qoura_dup_path, sep='\t', index=False)
 
     length = len(df_dup)
     df_train = df_dup.iloc[:int(length*0.95), :]
-    # df_test = df_pairs.iloc[int(length*0.95):, :]
     
     df_train_new = []
     for i, r in df_train.iterrows():
@@ -38,13 +52,11 @@ def clsm_gen_question_set():
             if j >= 5:
                 break
         df_train_new.append(temp_list)
-    df_train_new = pd.DataFrame(df_train_new, columns=['query', 'pos_doc', 'neg_doc_1', 'neg_doc_2', 'neg_doc_3', 'neg_doc_4', 'neg_doc_5'])
-    df_vali = df_train_new.iloc[int(len(df_train_new)*0.95):, :]
-    df_train = df_train_new.iloc[:int(len(df_train_new)*0.95), :]
+    df_train = pd.DataFrame(df_train_new, columns=['query', 'pos_doc', 'neg_doc_1', 'neg_doc_2', 'neg_doc_3', 'neg_doc_4', 'neg_doc_5'])
 
-    df_train.to_csv('../../data/clsm_qoura_train.tsv', sep='\t', index=False)
-    df_vali.to_csv('../../data/clsm_qoura_vali.tsv', sep='\t', index=False)
-    df_test.to_csv('../../data/clsm_qoura_test.tsv', sep='\t', index=False)
+    df_train.to_csv(qoura_train_path, sep='\t', index=False)
+    df_vali.to_csv(qoura_vali_path, sep='\t', index=False)
+    df_test.to_csv(qoura_test_path, sep='\t', index=False)
 
     ques_dict = {}
     for i, r in df.iterrows():
@@ -75,31 +87,26 @@ def clsm_gen_question_set():
     df_train['neg_doc_4_text'] = df_train['neg_doc_4'].apply(lambda x: ques_dict[x])
     df_train['neg_doc_5_text'] = df_train['neg_doc_5'].apply(lambda x: ques_dict[x])
     
-    df_vali['query_text']     = df_vali['query'].apply(lambda x: ques_dict[x])
-    df_vali['pos_doc_text']   = df_vali['pos_doc'].apply(lambda x: ques_dict[x])
-    df_vali['neg_doc_1_text'] = df_vali['neg_doc_1'].apply(lambda x: ques_dict[x])
-    df_vali['neg_doc_2_text'] = df_vali['neg_doc_2'].apply(lambda x: ques_dict[x])
-    df_vali['neg_doc_3_text'] = df_vali['neg_doc_3'].apply(lambda x: ques_dict[x])
-    df_vali['neg_doc_4_text'] = df_vali['neg_doc_4'].apply(lambda x: ques_dict[x])
-    df_vali['neg_doc_5_text'] = df_vali['neg_doc_5'].apply(lambda x: ques_dict[x])
     
+    df_vali['ques1_text'] = df_vali['qid1'].apply(lambda x: ques_dict[x])
+    df_vali['ques2_text'] = df_vali['qid2'].apply(lambda x: ques_dict[x])
+
     df_test['ques1_text'] = df_test['qid1'].apply(lambda x: ques_dict[x])
     df_test['ques2_text'] = df_test['qid2'].apply(lambda x: ques_dict[x])
 
     df_train_text = df_train[['query_text', 'pos_doc_text', 'neg_doc_1_text',\
                         'neg_doc_2_text', 'neg_doc_3_text', 'neg_doc_4_text', 'neg_doc_5_text']]
-    df_train_text.to_csv('../../data/clsm_qoura_train_text.tsv', sep='\t', index=False)
+    df_train_text.to_csv(qoura_train_text_path, sep='\t', index=False)
     
-    df_vali_text = df_vali[['query_text', 'pos_doc_text', 'neg_doc_1_text',\
-                        'neg_doc_2_text', 'neg_doc_3_text', 'neg_doc_4_text', 'neg_doc_5_text']]
-    df_vali_text.to_csv('../../data/clsm_qoura_vali_text.tsv', sep='\t', index=False)
+    df_vali_text = df_vali[['ques1_text', 'ques2_text', 'is_duplicate']]
+    df_vali_text.to_csv(qoura_vali_text_path, sep='\t', index=False)
     
     df_test_text = df_test[['ques1_text', 'ques2_text', 'is_duplicate']]
-    df_test_text.to_csv('../../data/clsm_qoura_test_text.tsv', sep='\t', index=False)    
+    df_test_text.to_csv(qoura_test_text_path, sep='\t', index=False)    
     
-    with open('model/embedding_dict.save', 'wb') as f:
+    with open(embedding_dict_path, 'wb') as f:
         pickle.dump(embedding_dict, f)
-    with open('model/embedding_length.save', 'wb') as f:
+    with open(embedding_length_path, 'wb') as f:
         pickle.dump(embedding_length, f)
 
 
