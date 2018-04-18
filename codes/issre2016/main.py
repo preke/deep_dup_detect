@@ -34,7 +34,7 @@ def get_sim_score2(title1, title2, w2v_model):
     for word in title2:
         vec2 += np.array(w2v_model[word])
     vec2 = vec2 / len(title2)
-    return cosine_similarity(vec1, vec2)
+    return cosine_similarity(vec1.reshape(1,-1), vec2.reshape(1,-1))
 
 
 def get_sim_score3(row1, row2):
