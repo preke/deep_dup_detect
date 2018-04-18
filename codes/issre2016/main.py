@@ -103,7 +103,8 @@ if __name__ == '__main__':
         scores = sorted(scores, key=lambda x:x[1], reverse=True)
         total_scores.append(scores)
         cnt += 1
-        print(scores)
+        print(scores[:10])
+        break
     # evaluation(df_querys, total_scores)
 
 
