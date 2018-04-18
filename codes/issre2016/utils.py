@@ -69,7 +69,7 @@ def load_data(data_path):
     df = pd.read_csv(open(data_path, 'rU'), encoding='utf-8')
     df = df[['Issue_id', 'Component', 'Title', 'Duplicated_issue']]
     df['Title'] = df['Title'].apply(preprocess.stem_and_stop_removal)
-    tf_idf_dict = get_tfidf_dict(df)
+    tf_idf_dict = {}# get_tfidf_dict(df)
     df['is_duplicate'] = df['Duplicated_issue'].apply(lambda x: not pd.isnull(x))
     word2vec_model = train_word2vec_model(df)
     return df, word2vec_model, tf_idf_dict
