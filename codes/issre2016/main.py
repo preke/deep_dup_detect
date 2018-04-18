@@ -26,8 +26,8 @@ def get_sim_score2(title1, title2, w2v_model):
         word embedding vectors similarity score.
         use pretained vectors.
     '''
-    vec1 = np.array([])
-    vec2 = np.array([])
+    vec1 = np.array([0.0]*100)
+    vec2 = np.array([0.0]*100)
     for word in title1:
         vec1 += np.array(w2v_model[word])
     vec1 = vec1 / len(title1)
@@ -66,7 +66,7 @@ def evaluation(df_querys, total_scores):
     total_recall_10 = 0
     
     index = 0
-    for i, r in df_querys.iterrows():
+    for i, r in df_querys[:1].iterrows():
         dup_list = r['Duplicated_issue'].apply(lambda x: x.split(';'))
         for issue in total_scores[index][:1]:
             if issue[0] in dup_list:
@@ -90,6 +90,7 @@ def evaluation(df_querys, total_scores):
 if __name__ == '__main__':
     df_data, word2vec_model, tf_idf_dict = load_data(DATA_PATH)
     df_querys = df_data[df_data['is_duplicate']==True]
+    
     total_scores = []
     for i, r1 in df_querys.iterrows():
         scores = []
@@ -100,6 +101,7 @@ if __name__ == '__main__':
         scores = sorted(scores, key=lambda x:x[1], reverse=True)
         total_scores.append(scores)
 
+    evaluation(df_querys, total_scores)
 
 
 
