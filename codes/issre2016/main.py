@@ -81,6 +81,7 @@ def evaluation(df_querys, total_scores):
             if issue[0] in dup_list:
                 total_recall_10 += 1
                 break
+        index += 1
     total_recall_1 /= len(df_querys)
     total_recall_5 /= len(df_querys)
     total_recall_10 /= len(df_querys)
