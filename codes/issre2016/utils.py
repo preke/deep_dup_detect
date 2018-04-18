@@ -58,7 +58,7 @@ def get_tfidf_dict(df):
     weight=tfidf.toarray()
     tf_idf_dict = {}
     for i in range(len(weight)):
-        tf_idf_dict[df['Issue_id'][i]] = weight[i]
+        tf_idf_dict[df['Issue_id'][i]] = weight[i].reshape(-1,1)
     
     return tf_idf_dict
 
