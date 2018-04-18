@@ -89,18 +89,20 @@ def evaluation(df_querys, total_scores):
 
 if __name__ == '__main__':
     df_data, word2vec_model, tf_idf_dict = load_data(DATA_PATH)
-    df_querys = df_data[df_data['is_duplicate']==True]
+    df_querys = df_data[df_data['is_duplicate']==True][:1000]
     
     total_scores = []
-    for i, r1 in df_querys[:1].iterrows():
+    cnt = 1
+    for i, r1 in df_querys.iterrows():
         scores = []
+        print('Calculating #%d  query...' %cnt)
         for j, r2 in df_data.iterrows():
             if r1['Issue_id'] != r2['Issue_id']:
                 score = combine_score(r1, r2, word2vec_model, tf_idf_dict)
                 scores.append((r2['Issue_id'], score)) 
         scores = sorted(scores, key=lambda x:x[1], reverse=True)
         total_scores.append(scores)
-
+        cnt += 1
     evaluation(df_querys, total_scores)
 
 
