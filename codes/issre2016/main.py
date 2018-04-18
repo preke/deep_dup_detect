@@ -68,7 +68,6 @@ def evaluation(df_querys, total_scores):
     index = 0
     for i, r in df_querys.iterrows():
         dup_list = r['Duplicated_issue'].split(';')
-        print(dup_list)
         for issue in total_scores[index][:1]:
             if issue[0] in dup_list:
                 total_recall_1 += 1
@@ -91,7 +90,7 @@ def evaluation(df_querys, total_scores):
 
 if __name__ == '__main__':
     df_data, word2vec_model, tf_idf_dict = load_data(DATA_PATH)
-    df_querys = df_data[df_data['is_duplicate']==True][:5]
+    df_querys = df_data[df_data['is_duplicate']==True][:1000]
     
     total_scores = []
     cnt = 1
@@ -105,8 +104,11 @@ if __name__ == '__main__':
         scores = sorted(scores, key=lambda x:x[1], reverse=True)
         total_scores.append(scores)
         cnt += 1
-        print(scores[:10])
-        
+        # print(scores[:10])
+    with open('scores_1000.txt', 'w') as f:
+        for scores in total_scores:
+            f.write(str(scores))
+
     evaluation(df_querys, total_scores)
 
 
