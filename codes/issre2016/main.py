@@ -50,7 +50,7 @@ def get_sim_score3(row1, row2):
 
 
 def combine_score(row1, row2, w2v_model, tf_idf_dict):
-    score1 = get_sim_score1(row1['Issue_id'], row2['Issue_id'], tf_idf_dict)
+    # score1 = get_sim_score1(row1['Issue_id'], row2['Issue_id'], tf_idf_dict)
     score2 = get_sim_score2(row1['Title'], row2['Title'], w2v_model)
     score3 = get_sim_score3(row1, row2)
     score  = (score1 + score2) * score3
