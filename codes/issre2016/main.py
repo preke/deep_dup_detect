@@ -66,7 +66,7 @@ def evaluation(df_querys, total_scores):
     total_recall_10 = 0
     
     index = 0
-    for i, r in df_querys[:1].iterrows():
+    for i, r in df_querys.iterrows():
         dup_list = r['Duplicated_issue'].split(';')
         for issue in total_scores[index][:1]:
             if issue[0] in dup_list:
