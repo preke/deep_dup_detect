@@ -90,7 +90,7 @@ def evaluation(df_querys, total_scores):
 
 if __name__ == '__main__':
     df_data, word2vec_model, tf_idf_dict = load_data(DATA_PATH)
-    df_querys = df_data[df_data['is_duplicate']==True][:1]
+    df_querys = df_data[df_data['is_duplicate']==True][:5]
     
     total_scores = []
     cnt = 1
@@ -105,7 +105,7 @@ if __name__ == '__main__':
         total_scores.append(scores)
         cnt += 1
         print(scores[:10])
-        break
+        
     evaluation(df_querys, total_scores)
 
 
