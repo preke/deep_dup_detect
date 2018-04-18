@@ -92,7 +92,7 @@ if __name__ == '__main__':
     df_querys = df_data[df_data['is_duplicate']==True]
     
     total_scores = []
-    for i, r1 in df_querys.iterrows():
+    for i, r1 in df_querys[:1].iterrows():
         scores = []
         for j, r2 in df_data.iterrows():
             if r1['Issue_id'] != r2['Issue_id']:
