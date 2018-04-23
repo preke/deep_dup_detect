@@ -32,6 +32,18 @@ def load_glove_as_dict(filepath):
     return word_vec
 
 
+def punctuate(text):
+    english_punctuations = [',', '.', ':', ';', '?', '(', ')', '[', ']', '&', '!', '*', '@', '#', '$', '%', '\'']  
+    ans = ""
+    for letter in text:
+        if letter in english_punctuations:
+            ans += ' '
+        else:
+            ans += letter
+    return ans
+
+
+
 def clsm_gen_question_set():    
     df = pd.read_csv(quora_path, sep='\t')
     df_pairs = df[['qid1', 'qid2', 'is_duplicate']]
@@ -80,13 +92,13 @@ def clsm_gen_question_set():
     '''Embedding use self-trained word2vec'''
     corpus = []
     for i, r in df_train.iterrows():
-        corpus.append(word_tokenize(ques_dict[r['query']]))
-        corpus.append(word_tokenize(ques_dict[r['pos_doc']]))
-        corpus.append(word_tokenize(ques_dict[r['neg_doc_1']]))
-        corpus.append(word_tokenize(ques_dict[r['neg_doc_2']]))
-        corpus.append(word_tokenize(ques_dict[r['neg_doc_3']]))
-        corpus.append(word_tokenize(ques_dict[r['neg_doc_4']]))
-        corpus.append(word_tokenize(ques_dict[r['neg_doc_5']]))
+        corpus.append(punctuate(ques_dict[r['query']]).split(' '))
+        corpus.append(punctuate(ques_dict[r['pos_doc']]).split(' '))
+        corpus.append(punctuate(ques_dict[r['neg_doc_1']]).split(' '))
+        corpus.append(punctuate(ques_dict[r['neg_doc_2']]).split(' '))
+        corpus.append(punctuate(ques_dict[r['neg_doc_3']]).split(' '))
+        corpus.append(punctuate(ques_dict[r['neg_doc_4']]).split(' '))
+        corpus.append(punctuate(ques_dict[r['neg_doc_5']]).split(' '))
         
 
     word2vec_model = Word2Vec(corpus, size=300, window=5, min_count=1)
