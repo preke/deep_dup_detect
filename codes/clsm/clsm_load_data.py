@@ -90,7 +90,7 @@ def clsm_gen_question_set():
 
     word2vec_model = Word2Vec(corpus, size=300, window=5, min_count=1)
     embedding_dict = word2vec_model
-
+    embedding_length = 300
     '''Embedding use GloVe'''
     # embedding_length = 300
     # embedding_dict = load_glove_as_dict(glove_path)
