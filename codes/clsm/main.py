@@ -6,13 +6,14 @@ import torch
 import torchtext.data as data
 import torchtext.datasets as datasets
 import argparse
-from clsm_load_data import clsm_gen_question_set
+from clsm_load_data import clsm_gen_question_set, punctuate
 from word_hashing import WordHashing
 import pickle
 import datetime
 import traceback
 from train import train, test
 from model import CNN_clsm, CNN_Sim
+
 
 Train_path = '../../data/clsm_qoura_train_text.tsv'
 Vali_path  = '../../data/clsm_qoura_vali_text.tsv'
@@ -69,7 +70,7 @@ with open(embedding_dict_path, 'rb') as f:
 with open(embedding_length_path, 'rb') as f:
     embedding_length = pickle.load(f)
 
-TEXT = data.Field(sequential=True, use_vocab=True, batch_first=True)
+TEXT = data.Field(sequential=True, use_vocab=True, batch_first=True, tokenize=lambda x: punctuate(x))
 label_field  = data.Field(sequential=False)
 train_data = data.TabularDataset(path=Train_path, 
                                  format='TSV',
