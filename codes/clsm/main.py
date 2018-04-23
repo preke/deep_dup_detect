@@ -84,6 +84,9 @@ vali_data = data.TabularDataset(path=Vali_path,
 TEXT.build_vocab(train_data, vali_data)
 label_field.build_vocab(vali_data)
 
+for idx, word in enumerate(label_field.vocab.itos):
+    print('%s: %s' %(idx, word))
+
 train_iter = data.BucketIterator(
     train_data,
     batch_size=args.batch_size,
@@ -127,7 +130,12 @@ if args.snapshot is not None:
     print('\nLoading model from {}...'.format(args.snapshot))
     cnn.load_state_dict(torch.load(args.snapshot))
 else:
-    train(train_iter=train_iter, vali_iter=vali_iter, model=cnn, args=args)
+    try:
+        train(train_iter=train_iter, vali_iter=vali_iter, model=cnn, args=args)
+    except KeyboardInterrupt:
+        print(traceback.print_exc())
+        print('\n' + '-' * 89)
+        print('Exiting from training early')
 
 '''
     test
@@ -140,8 +148,7 @@ test_data = data.TabularDataset( path=Test_path,
                                  fields=[('query', TEXT), ('doc', TEXT), ('label', label_field)])
 
 
-for idx, word in enumerate(label_field.vocab.itos):
-    print('%s: %s' %(idx, word))
+
 
 
 
