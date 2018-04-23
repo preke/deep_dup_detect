@@ -69,7 +69,7 @@ with open(embedding_dict_path, 'rb') as f:
 with open(embedding_length_path, 'rb') as f:
     embedding_length = pickle.load(f)
 
-TEXT = data.Field(sequential=True, use_vocab=True, batch_first=True)
+TEXT = data.Field(sequential=True, use_vocab=True, batch_first=True, lower=True)
 label_field  = data.Field(sequential=False)
 train_data = data.TabularDataset(path=Train_path, 
                                  format='TSV',
