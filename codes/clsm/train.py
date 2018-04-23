@@ -97,13 +97,12 @@ def eval(vali_iter, model, args):
             else:
                 pass
         
-    size = float(len(data_iter.dataset))
+    size = float(len(vali_iter.dataset))
     avg_loss /= size
     accuracy = 100.0 * float(corrects)/size
-    print('\nEvaluation - loss: {:.6f}  acc: {:.4f}%({}/{}) \n'.format(avg_loss, 
-                                                                       accuracy, 
-                                                                       corrects, 
-                                                                       size))
+    print('\nEvaluation - acc: {:.4f}%({}/{}) \n'.format(accuracy, 
+                                                         corrects, 
+                                                         size))
     return accuracy
 
 
