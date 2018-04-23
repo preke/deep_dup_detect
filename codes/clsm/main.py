@@ -88,14 +88,14 @@ train_iter = data.BucketIterator(
     train_data,
     batch_size=args.batch_size,
     device=0,
-    sort_key=(lambda x: len(x.query) + len(pos_doc) + len(neg_doc_1)\
-                + len(neg_doc_2) + len(neg_doc_3) + len(neg_doc_4)\
-                + len(neg_doc_5)),
+    sort_key=(lambda x: len(x.query) + len(x.pos_doc) + len(x.neg_doc_1)\
+                + len(x.neg_doc_2) + len(x.neg_doc_3) + len(x.neg_doc_4)\
+                + len(x.neg_doc_5)),
     repeat=False)
 vali_iter = data.BucketIterator(
     vali_data, 
     batch_size=args.batch_size,
-    sort_key=(lambda x: len(x.query) + len(doc)),
+    sort_key=(lambda x: len(x.query) + len(x.doc)),
     device=0,
     repeat=False)
 
