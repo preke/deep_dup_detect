@@ -17,6 +17,18 @@ qoura_test_text_path  = '../../data/clsm_qoura_test_text.tsv'
 embedding_dict_path   = 'model/embedding_dict.save'
 embedding_length_path = 'model/embedding_length.save'
 
+glove_path = '../../data/wordvec.txt'
+
+def load_glove_as_dict(filepath):
+    word_vec = {}
+    with open(filepath) as fr:
+        for line in fr:
+            line = line.split()
+            word = line[0]
+            vec = line[1:]
+            word_vec[word] = vec
+    return word_vec
+
 
 def clsm_gen_question_set():    
     df = pd.read_csv(quora_path, sep='\t')
@@ -62,6 +74,7 @@ def clsm_gen_question_set():
     for i, r in df.iterrows():
         ques_dict[r['qid1']] = str(r['question1']).lower()
         ques_dict[r['qid2']] = str(r['question2']).lower()
+    
     corpus = []
     for i, r in df_train.iterrows():
         corpus += ques_dict[r['query']].split(' ')
@@ -72,13 +85,20 @@ def clsm_gen_question_set():
         corpus += ques_dict[r['neg_doc_4']].split(' ')
         corpus += ques_dict[r['neg_doc_5']].split(' ')
 
-    wh_instance      = WordHashing(corpus)
-    embedding_length = 0
-    embedding_dict   = {}
-    for word in corpus:
-        embedding_dict[word] = wh_instance.hashing(word)
-        embedding_length     = len(wh_instance.hashing(word))
-    print('embedding_length: %s' %embedding_length)
+    '''Embedding use GloVe'''
+    embedding_length = 300
+    embedding_dict = load_glove_as_dict(glove_path)
+
+    '''Embedding use word_hashing'''        
+    # wh_instance      = WordHashing(corpus)
+    # embedding_length = 0
+    # embedding_dict   = {}
+    # for word in corpus:
+    #     embedding_dict[word] = wh_instance.hashing(word)
+    #     embedding_length     = len(wh_instance.hashing(word))
+    # print('embedding_length: %s' %embedding_length)
+    
+
     df_train['query_text']     = df_train['query'].apply(lambda x: ques_dict[x])
     df_train['pos_doc_text']   = df_train['pos_doc'].apply(lambda x: ques_dict[x])
     df_train['neg_doc_1_text'] = df_train['neg_doc_1'].apply(lambda x: ques_dict[x])
