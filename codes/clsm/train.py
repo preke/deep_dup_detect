@@ -83,7 +83,7 @@ def eval(vali_iter, model, args):
         query, doc, label = batch.query, batch.doc, batch.label
         if args.cuda:
             query, doc, label = query.cuda(), doc.cuda(), label.cuda()
-        logit = model(query, label)
+        logit = model(query, doc)
         target = label.type(torch.cuda.FloatTensor)
         length = len(target.data)
         for i in range(length):
