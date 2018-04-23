@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 from word_hashing import WordHashing
 import pickle
+import gensim
+from gensim.models import Word2Vec
 
 
 quora_path            = '../../data/quora_duplicate_questions.tsv'
@@ -75,21 +77,35 @@ def clsm_gen_question_set():
         ques_dict[r['qid1']] = str(r['question1']).lower()
         ques_dict[r['qid2']] = str(r['question2']).lower()
     
+    '''Embedding use self-trained word2vec'''
     corpus = []
     for i, r in df_train.iterrows():
-        corpus += ques_dict[r['query']].split(' ')
-        corpus += ques_dict[r['pos_doc']].split(' ')
-        corpus += ques_dict[r['neg_doc_1']].split(' ')
-        corpus += ques_dict[r['neg_doc_2']].split(' ')
-        corpus += ques_dict[r['neg_doc_3']].split(' ')
-        corpus += ques_dict[r['neg_doc_4']].split(' ')
-        corpus += ques_dict[r['neg_doc_5']].split(' ')
+        corpus.append(ques_dict[r['query']].split(' '))
+        corpus.append(ques_dict[r['pos_doc']].split(' '))
+        corpus.append(ques_dict[r['neg_doc_1']].split(' '))
+        corpus.append(ques_dict[r['neg_doc_2']].split(' '))
+        corpus.append(ques_dict[r['neg_doc_3']].split(' '))
+        corpus.append(ques_dict[r['neg_doc_4']].split(' '))
+        corpus.append(ques_dict[r['neg_doc_5']].split(' '))
+
+    word2vec_model = Word2Vec(corpus, size=300, window=5, min_count=1)
+    embedding_dict = word2vec_model
 
     '''Embedding use GloVe'''
-    embedding_length = 300
-    embedding_dict = load_glove_as_dict(glove_path)
+    # embedding_length = 300
+    # embedding_dict = load_glove_as_dict(glove_path)
 
     '''Embedding use word_hashing'''        
+    # corpus = []
+    # for i, r in df_train.iterrows():
+    #     corpus += ques_dict[r['query']].split(' ')
+    #     corpus += ques_dict[r['pos_doc']].split(' ')
+    #     corpus += ques_dict[r['neg_doc_1']].split(' ')
+    #     corpus += ques_dict[r['neg_doc_2']].split(' ')
+    #     corpus += ques_dict[r['neg_doc_3']].split(' ')
+    #     corpus += ques_dict[r['neg_doc_4']].split(' ')
+    #     corpus += ques_dict[r['neg_doc_5']].split(' ')
+    
     # wh_instance      = WordHashing(corpus)
     # embedding_length = 0
     # embedding_dict   = {}
