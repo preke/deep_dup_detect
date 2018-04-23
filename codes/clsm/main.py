@@ -107,7 +107,10 @@ print('word vector length: %s.\n' %str(args.embedding_length))
 word_vec_list = []
 for idx, word in enumerate(TEXT.vocab.itos):
     if word in embedding_dict:
-        vector = np.array(embedding_dict[word], dtype=float).reshape(1, embedding_length)
+        try:
+            vector = np.array(embedding_dict[word], dtype=float).reshape(1, embedding_length)
+        except:
+            vector = np.random.rand(1, args.embedding_length)
     else:
         vector = np.random.rand(1, args.embedding_length)
     word_vec_list.append(torch.from_numpy(vector))
