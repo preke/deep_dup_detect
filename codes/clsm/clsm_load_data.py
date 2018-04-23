@@ -4,7 +4,7 @@ from word_hashing import WordHashing
 import pickle
 import gensim
 from gensim.models import Word2Vec
-
+from nltk.tokenize import word_tokenize
 
 quora_path            = '../../data/quora_duplicate_questions.tsv'
 qoura_dup_path        = '../../data/clsm_quora_dup.tsv'
@@ -80,13 +80,14 @@ def clsm_gen_question_set():
     '''Embedding use self-trained word2vec'''
     corpus = []
     for i, r in df_train.iterrows():
-        corpus.append(ques_dict[r['query']].split(' '))
-        corpus.append(ques_dict[r['pos_doc']].split(' '))
-        corpus.append(ques_dict[r['neg_doc_1']].split(' '))
-        corpus.append(ques_dict[r['neg_doc_2']].split(' '))
-        corpus.append(ques_dict[r['neg_doc_3']].split(' '))
-        corpus.append(ques_dict[r['neg_doc_4']].split(' '))
-        corpus.append(ques_dict[r['neg_doc_5']].split(' '))
+        corpus.append(word_tokenize(ques_dict[r['query']]))
+        corpus.append(word_tokenize(ques_dict[r['pos_doc']]))
+        corpus.append(word_tokenize(ques_dict[r['neg_doc_1']]))
+        corpus.append(word_tokenize(ques_dict[r['neg_doc_2']]))
+        corpus.append(word_tokenize(ques_dict[r['neg_doc_3']]))
+        corpus.append(word_tokenize(ques_dict[r['neg_doc_4']]))
+        corpus.append(word_tokenize(ques_dict[r['neg_doc_5']]))
+        
 
     word2vec_model = Word2Vec(corpus, size=300, window=5, min_count=1)
     embedding_dict = word2vec_model
