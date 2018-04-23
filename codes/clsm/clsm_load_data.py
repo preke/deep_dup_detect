@@ -86,17 +86,17 @@ def clsm_gen_question_set():
         corpus += ques_dict[r['neg_doc_5']].split(' ')
 
     '''Embedding use GloVe'''
-    embedding_length = 300
-    embedding_dict = load_glove_as_dict(glove_path)
+    # embedding_length = 300
+    # embedding_dict = load_glove_as_dict(glove_path)
 
     '''Embedding use word_hashing'''        
-    # wh_instance      = WordHashing(corpus)
-    # embedding_length = 0
-    # embedding_dict   = {}
-    # for word in corpus:
-    #     embedding_dict[word] = wh_instance.hashing(word)
-    #     embedding_length     = len(wh_instance.hashing(word))
-    # print('embedding_length: %s' %embedding_length)
+    wh_instance      = WordHashing(corpus)
+    embedding_length = 0
+    embedding_dict   = {}
+    for word in corpus:
+        embedding_dict[word] = wh_instance.hashing(word)
+        embedding_length     = len(wh_instance.hashing(word))
+    print('embedding_length: %s' %embedding_length)
     
 
     df_train['query_text']     = df_train['query'].apply(lambda x: ques_dict[x])
