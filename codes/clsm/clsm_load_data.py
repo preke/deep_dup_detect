@@ -90,42 +90,42 @@ def clsm_gen_question_set():
         ques_dict[r['qid2']] = str(r['question2']).lower()
     
     '''Embedding use self-trained word2vec'''
-    corpus = []
-    for i, r in df_train.iterrows():
-        corpus.append(punctuate(ques_dict[r['query']]).split(' '))
-        corpus.append(punctuate(ques_dict[r['pos_doc']]).split(' '))
-        corpus.append(punctuate(ques_dict[r['neg_doc_1']]).split(' '))
-        corpus.append(punctuate(ques_dict[r['neg_doc_2']]).split(' '))
-        corpus.append(punctuate(ques_dict[r['neg_doc_3']]).split(' '))
-        corpus.append(punctuate(ques_dict[r['neg_doc_4']]).split(' '))
-        corpus.append(punctuate(ques_dict[r['neg_doc_5']]).split(' '))
+    # corpus = []
+    # for i, r in df_train.iterrows():
+        # corpus.append(punctuate(ques_dict[r['query']]).split(' '))
+        # corpus.append(punctuate(ques_dict[r['pos_doc']]).split(' '))
+        # corpus.append(punctuate(ques_dict[r['neg_doc_1']]).split(' '))
+        # corpus.append(punctuate(ques_dict[r['neg_doc_2']]).split(' '))
+        # corpus.append(punctuate(ques_dict[r['neg_doc_3']]).split(' '))
+        # corpus.append(punctuate(ques_dict[r['neg_doc_4']]).split(' '))
+        # corpus.append(punctuate(ques_dict[r['neg_doc_5']]).split(' '))
         
 
-    word2vec_model = Word2Vec(corpus, size=300, window=5, min_count=1)
-    embedding_dict = word2vec_model
-    embedding_length = 300
+    # word2vec_model = Word2Vec(corpus, size=300, window=5, min_count=1)
+    # embedding_dict = word2vec_model
+    # embedding_length = 300
     '''Embedding use GloVe'''
     # embedding_length = 300
     # embedding_dict = load_glove_as_dict(glove_path)
 
     '''Embedding use word_hashing'''        
-    # corpus = []
-    # for i, r in df_train.iterrows():
-    #     corpus += ques_dict[r['query']].split(' ')
-    #     corpus += ques_dict[r['pos_doc']].split(' ')
-    #     corpus += ques_dict[r['neg_doc_1']].split(' ')
-    #     corpus += ques_dict[r['neg_doc_2']].split(' ')
-    #     corpus += ques_dict[r['neg_doc_3']].split(' ')
-    #     corpus += ques_dict[r['neg_doc_4']].split(' ')
-    #     corpus += ques_dict[r['neg_doc_5']].split(' ')
+    corpus = []
+    for i, r in df_train.iterrows():
+        corpus += punctuate(ques_dict[r['query']]).split(' ')
+        corpus += punctuate(ques_dict[r['pos_doc']]).split(' ')
+        corpus += punctuate(ques_dict[r['neg_doc_1']]).split(' ')
+        corpus += punctuate(ques_dict[r['neg_doc_2']]).split(' ')
+        corpus += punctuate(ques_dict[r['neg_doc_3']]).split(' ')
+        corpus += punctuate(ques_dict[r['neg_doc_4']]).split(' ')
+        corpus += punctuate(ques_dict[r['neg_doc_5']]).split(' ')
     
-    # wh_instance      = WordHashing(corpus)
-    # embedding_length = 0
-    # embedding_dict   = {}
-    # for word in corpus:
-    #     embedding_dict[word] = wh_instance.hashing(word)
-    #     embedding_length     = len(wh_instance.hashing(word))
-    # print('embedding_length: %s' %embedding_length)
+    wh_instance      = WordHashing(corpus)
+    embedding_length = 0
+    embedding_dict   = {}
+    for word in corpus:
+        embedding_dict[word] = wh_instance.hashing(word)
+        embedding_length     = len(wh_instance.hashing(word))
+    print('embedding_length: %s' %embedding_length)
     
 
     df_train['query_text']     = df_train['query'].apply(lambda x: ques_dict[x])
