@@ -116,5 +116,5 @@ class DA_lstm(nn.Module):
 
         result = self.linear3(result)
         print(result.shape)
-        return result.unsqueeze()
+        return result.unsqueeze(dim=1)
 
