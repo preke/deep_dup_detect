@@ -52,9 +52,7 @@ class DA_lstm(nn.Module):
         mlp_layers.append(nn.ReLU())   
         return nn.Sequential(*mlp_layers)   # * used to unpack list
 
-    def forward(self, batched_data):
-        sent1_linear = torch.tensor(batched_data[1]).to(self.device)
-        sent2_linear = torch.tensor(batched_data[2]).to(self.device)
+    def forward(self, sent1_linear, sent2_linear):
         sent1_linear_embedding = self.embed(sent1_linear)
         sent2_linear_embedding = self.embed(sent2_linear)
         len1 = sent1_linear_embedding.size(1)
