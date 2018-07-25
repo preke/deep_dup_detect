@@ -53,8 +53,8 @@ class DA_lstm(nn.Module):
         return nn.Sequential(*mlp_layers)   # * used to unpack list
 
     def forward(self, sent1_linear, sent2_linear):
-        sent1_linear_embedding = self.embed(sent1_linear)
-        sent2_linear_embedding = self.embed(sent2_linear)
+        sent1_linear_embedding = self.word_embedding(sent1_linear)
+        sent2_linear_embedding = self.word_embedding(sent2_linear)
         len1 = sent1_linear_embedding.size(1)
         len2 = sent2_linear_embedding.size(1)
         
