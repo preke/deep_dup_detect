@@ -65,7 +65,7 @@ def train(train_iter, vali_iter, model, args):
                                                                              batch.batch_size))
             if steps % args.test_interval == 0:
                 vali_acc = eval(vali_iter, model, args)
-                model.forward()
+                model.train()
                 if vali_acc > best_acc:
                     best_acc = vali_acc
                     last_step = steps
@@ -115,6 +115,7 @@ def eval(data_iter, model, args):
 
 
 def test(test_iter, model, args):
+    model.eval()
     accuracy = 0.0
     total_num = 0.0
     threshold = 0.5
