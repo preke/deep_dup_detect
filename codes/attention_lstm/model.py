@@ -10,10 +10,10 @@ import numpy as np
 class DA_lstm(nn.Module):
     def __init__(self, vocab_size, device, word_matrix=None, embed_dim=300, lstm_hidden_dim=200):
         super(DA_lstm, self).__init__()
-        self.embed_num = vocab_size
-        self.embed_dim = embed_dim
-        self.embed     = nn.Embedding(self.embed_num, self.embed_dim)
-        self.device    = device
+        self.embed_num      = vocab_size
+        self.embed_dim      = embed_dim
+        self.word_embedding = nn.Embedding(self.embed_num, self.embed_dim)
+        self.device         = device
         
         if word_matrix is not None:
             word_matrix = torch.tensor(word_matrix).to(self.device)
